@@ -10,42 +10,7 @@
 
 namespace
 {
-    QGraphicsItemGroup* createHuman(const QColor penColor = Qt::black,
-                                    const int xHeadCenter = 0,
-                                    const int yHeadCenter = 0,
-                                    QGraphicsItem * parent = 0)
-    {
-        const int headRadius = 4;
-        const int penWidth = 2;
-        const QPen pen(penColor, penWidth);
-        QAbstractGraphicsShapeItem* head = new QGraphicsEllipseItem(xHeadCenter-headRadius,yHeadCenter-headRadius,2*headRadius,2*headRadius);
-        head->setPen(pen);
-        head->setBrush(penColor);
-        const int bodyLength = 20;
-        const QPointF neckPoint(xHeadCenter, yHeadCenter+headRadius);
-        const QPointF bodyBottomPoint = neckPoint + QPointF(0.0, bodyLength);
-        QAbstractGraphicsShapeItem* body = new QGraphicsPolygonItem(QVector<QPointF>()<< neckPoint << bodyBottomPoint);
-        body->setPen(pen);
-        const int armLength = 10;
-        QAbstractGraphicsShapeItem* leftArm = new QGraphicsPolygonItem(QVector<QPointF>()<< neckPoint <<neckPoint + QPointF(-armLength, +armLength));
-        QAbstractGraphicsShapeItem* rightArm = new QGraphicsPolygonItem(QVector<QPointF>()<< neckPoint <<neckPoint + QPointF(+armLength, +armLength));
-        leftArm->setPen(pen);
-        rightArm->setPen(pen);
-        const int vLegLength = 15;
-        const int hLegLength = 10;
-        QAbstractGraphicsShapeItem* leftLeg = new QGraphicsPolygonItem(QVector<QPointF>()<< bodyBottomPoint <<bodyBottomPoint + QPointF(-hLegLength, +vLegLength));
-        QAbstractGraphicsShapeItem* rightLeg = new QGraphicsPolygonItem(QVector<QPointF>()<< bodyBottomPoint <<bodyBottomPoint + QPointF(+hLegLength, +vLegLength));
-        leftLeg->setPen(pen);
-        rightLeg->setPen(pen);
-        QGraphicsItemGroup* human = new QGraphicsItemGroup(parent);
-        human->addToGroup(head);
-        human->addToGroup(body);
-        human->addToGroup(leftArm);
-        human->addToGroup(rightArm);
-        human->addToGroup(leftLeg);
-        human->addToGroup(rightLeg);
-        return human;
-    }
+
 
    QGraphicsScene* createSceneForGame(Game const& game, QObject* parent = 0)
    {
@@ -56,7 +21,8 @@ namespace
        {
            for(size_t h = 0; h < game.numHumans(); ++h)
            {
-               QGraphicsItemGroup* human = createHuman(game.isInfected(d,h) ? Qt::red : Qt::green, xDistance*h, yDistance*d);
+               HumanItem* human = new HumanItem(QPoint(xDistance*h, yDistance*d));
+               human->setState(game.isInfected(d,h) ? HumanItem::ILL : HumanItem::NOT_ILL);
                scene->addItem(human);
            }
            if (0 < d && d < game.numDays()-1)
@@ -104,11 +70,6 @@ MainWindow::MainWindow(QWidget *parent) :
   , m_scene(createSceneForGame(m_game, this))
   , m_view(new QGraphicsView(m_scene, this))
 {
-    auto illHuman = new HumanItem(QPointF(-150,150));
-    illHuman->setState(HumanItem::ILL);
-    auto fitHuman = new HumanItem(QPointF(-100,150));
-    m_scene->addItem(illHuman);
-    m_scene->addItem(fitHuman);
     showMaximized();
     setCentralWidget(m_view);
 }
