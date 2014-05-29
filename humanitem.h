@@ -13,6 +13,8 @@ public:
         NOT_ILL
     };
     explicit HumanItem(QPointF const& topLeft, QGraphicsItem* parent = 0);
+    static int humanWidth();
+    static int humanHeight();
     virtual QRectF	boundingRect() const;
     virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
     void setState(State const& state);

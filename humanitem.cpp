@@ -20,9 +20,19 @@ HumanItem::HumanItem(const QPointF &topLeft, QGraphicsItem *parent)
 
 }
 
+int HumanItem::humanWidth()
+{
+    return rectWidth;
+}
+
+int HumanItem::humanHeight()
+{
+    return rectHeight;
+}
+
 QRectF HumanItem::boundingRect() const
 {
-    return QRectF(m_topLeft, QSize(40, 40));
+    return QRectF(m_topLeft, QSize(humanWidth(), humanHeight()));
 }
 
 void HumanItem::paint(QPainter *painter, const QStyleOptionGraphicsItem * , QWidget *)
