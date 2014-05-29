@@ -1,4 +1,5 @@
-- Make the drawing of the meeting line nice : they do not match the current width settings of the humans. 
+- The generation of meetings was implemented. NEXT STEP comment out
+the generation of illness propagation. 
 - Test the creation of the random scenario : set google test first.
 - Make the Humans in the Requestable state lightened in the moseOver Event. 
 
