@@ -42,22 +42,19 @@ void HumanItem::paint(QPainter *painter, const QStyleOptionGraphicsItem * , QWid
     {
         currentColor = Qt::red;
     }
-    else if (NOT_ILL == m_state)
+    if (NOT_ILL == m_state)
     {
         currentColor = Qt::green;
     }
-    else if (REQUESTABLE == m_state)
+    if (REQUESTABLE == m_state)
     {
-        currentColor == Qt::black;
+        currentColor = Qt::black;
     }
-    else if (NOT_REQUESTABLE == m_state)
+    if (NOT_REQUESTABLE == m_state)
     {
-        currentColor == Qt::gray;
+        currentColor = Qt::gray;
     }
-    else
-    {
-        Q_ASSERT(false);
-    }
+
     painter->setBrush(QBrush(currentColor));
     painter->setPen(Qt::NoPen);
     const QPoint topMiddle(boundingRect().left() + boundingRect().width()/2, boundingRect().top());

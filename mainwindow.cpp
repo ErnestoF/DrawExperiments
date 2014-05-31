@@ -40,7 +40,18 @@ namespace
            for(size_t h = 0; h < game.numHumans(); ++h)
            {
                HumanItem* human = new HumanItem(QPoint(xLeft(h), yTop(d)));
-               human->setState(game.isInfected(d,h) ? HumanItem::ILL : HumanItem::NOT_ILL);
+               if(game.numDays()-1 == d)
+               {
+                   human->setState(game.isInfected(d,h) ? HumanItem::ILL : HumanItem::NOT_ILL);
+               }
+               else if (game.numDays()-2 == d)
+               {
+                   human->setState(HumanItem::REQUESTABLE);
+               }
+               else
+               {
+                   human->setState(HumanItem::NOT_REQUESTABLE);
+               }
                scene->addItem(human);
            }
            if (0 < d && d < game.numDays()-1)
