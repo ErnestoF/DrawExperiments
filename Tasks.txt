@@ -1,2 +1,4 @@
-- Make the Humans in the Requestable state lightened in the moseOver Event. 
+- Catch the emmited signal, when the user clicks on the requestable guest. 
+
+- Hide meetings line. Make them discovarable, when one of the participated guests gets requested. 
 

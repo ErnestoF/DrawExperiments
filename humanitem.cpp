@@ -1,4 +1,6 @@
 #include "humanitem.h"
+
+#include <QDebug>
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 
@@ -12,12 +14,14 @@ namespace
     const int yArmProjection = 10;
     const int legHeight = rectHeight - 2*headRad - bodyLength;
 }
-HumanItem::HumanItem(const QPointF &topLeft, QGraphicsItem *parent)
-    : QGraphicsItem(parent)
+HumanItem::HumanItem(const QPointF &topLeft,QObject* p, QGraphicsItem *parent)
+    : QObject(p)
+    , QGraphicsItem(parent)
     , m_topLeft(topLeft)
     , m_state(NOT_REQUESTABLE)
+    , m_isHovered(false)
 {
-
+    setAcceptHoverEvents(true);
 }
 
 int HumanItem::humanWidth()
@@ -48,7 +52,7 @@ void HumanItem::paint(QPainter *painter, const QStyleOptionGraphicsItem * , QWid
     }
     if (REQUESTABLE == m_state)
     {
-        currentColor = Qt::black;
+        currentColor = m_isHovered ? Qt::cyan : Qt::black;
     }
     if (NOT_REQUESTABLE == m_state)
     {
@@ -63,7 +67,7 @@ void HumanItem::paint(QPainter *painter, const QStyleOptionGraphicsItem * , QWid
     painter->drawEllipse(headCenter, headRad,headRad);
     const QPoint headBottom = headCenter + QPoint(0, headRad);
     const QPoint bodyBottom = headBottom + QPoint(0, bodyLength);
-    painter->setPen(QPen(currentColor, 2));
+    painter->setPen(QPen(currentColor, m_isHovered && REQUESTABLE == m_state ? 3 : 2));
     painter->drawLine(headBottom, bodyBottom);
     painter->drawLine(headBottom, headBottom + QPoint(-xArmProjection, yArmProjection));
     painter->drawLine(headBottom, headBottom + QPoint(xArmProjection, yArmProjection));
@@ -75,5 +79,32 @@ void HumanItem::paint(QPainter *painter, const QStyleOptionGraphicsItem * , QWid
 void HumanItem::setState(State const& state)
 {
     m_state = state;
+    update();
+}
+
+void HumanItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+    Q_UNUSED(event);
+    m_isHovered = false;
+    update();
+}
+
+void HumanItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    Q_UNUSED(event);
+    if(REQUESTABLE == m_state)
+    {
+        Q_EMIT statusRequested();
+    }
+}
+
+void HumanItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    Q_UNUSED(event);
+}
+void HumanItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+{
+    Q_UNUSED(event);
+    m_isHovered = true;
     update();
 }

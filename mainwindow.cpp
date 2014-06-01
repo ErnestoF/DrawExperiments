@@ -2,6 +2,7 @@
 
 
 #include "humanitem.h"
+#include <QDebug>
 #include <QGraphicsEllipseItem>
 #include <QGraphicsScene>
 #include <QGraphicsPolygonItem>
@@ -53,6 +54,10 @@ namespace
                    human->setState(HumanItem::NOT_REQUESTABLE);
                }
                scene->addItem(human);
+               scene->connect(human, &HumanItem::statusRequested, [d,h,human,&game]()
+               {
+                  human->setState(game.isInfected(d,h) ? HumanItem::ILL : HumanItem::NOT_ILL);
+               });
            }
            if (0 < d && d < game.numDays()-1)
            {

@@ -83,7 +83,7 @@ Game Game::generateGame(const size_t numHumans, const size_t numDays)
     Q_ASSERT(1 < numDays);
     Game result(numHumans, numDays);
     std::default_random_engine generator(std::chrono::system_clock::now().time_since_epoch().count());
-    std::uniform_int_distribution<human_t> distribution(0,numHumans);
+    std::uniform_int_distribution<human_t> distribution(0,numHumans-1);
     std::uniform_real_distribution<float> infectionDistribution;
     const human_t firstInfectedHuman = distribution(generator);
     Q_ASSERT(firstInfectedHuman < numHumans);
