@@ -1,4 +1,3 @@
-- Catch the emmited signal, when the user clicks on the requestable guest. 
-
-- Hide meetings line. Make them discovarable, when one of the participated guests gets requested. 
-
+- Manually test the drawing of the meetings lines.
+- Draw the game bottom-to-top.
+- Think, where to hold a game logic. In the class game or somewhere else?

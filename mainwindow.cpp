@@ -9,6 +9,9 @@
 #include <QGraphicsView>
 #include <QHBoxLayout>
 
+#include <functional>
+#include <memory>
+#include <vector>
 
 namespace
 {
@@ -31,21 +34,61 @@ namespace
     {
         return yTop(d) + HumanItem::humanHeight();
     }
+    void drawMeeting(Game::human_t human, Game::day_t day, Game const* game, QGraphicsScene* scene)
+        {
+            auto meetings = game->meetings(day);
 
+            auto firstMeetings = meetings.at(0);
+            auto secondMeetings = meetings.at(1);
+            auto diff_y1 = 4;
+            auto diff_y2 = 14;
+            if(firstMeetings.contains(human))
+            {
+                for(auto h : firstMeetings)
+                {
+                    auto* meetingLine = new QGraphicsPolygonItem(QVector<QPointF>()
+                                                                 <<QPointF(xCenter(h), yTop(day)- diff_y1)
+                                                                 <<QPointF(xCenter(h), yTop(day)- diff_y2));
+                    scene->addItem(meetingLine);
+                }
+                auto firstGuest1 = *std::min_element(firstMeetings.begin(), firstMeetings.end());
+                auto lastGuest1= *std::max_element(firstMeetings.begin(), firstMeetings.end());
+                auto meetingLine1 = new QGraphicsPolygonItem(QVector<QPointF>()
+                                                            <<QPointF(xCenter(firstGuest1), yTop(day) - diff_y2)
+                                                            <<QPointF(xCenter(lastGuest1) , yTop(day)-  diff_y2));
+                scene->addItem(meetingLine1);
+
+            }
+            if(secondMeetings.contains(human))
+            {
+                for(auto h : secondMeetings)
+                {
+                    auto* meetingLine = new QGraphicsPolygonItem(QVector<QPointF>()
+                                                                 <<QPointF(xCenter(h), yBottom(day) + diff_y1)
+                                                                 <<QPointF(xCenter(h), yBottom(day) + diff_y2));
+                    scene->addItem(meetingLine);
+                }
+                auto firstGuest2 = *std::min_element(secondMeetings.begin(), secondMeetings.end());
+                auto lastGuest2= *std::max_element(secondMeetings.begin(), secondMeetings.end());
+                auto meetingLine2 = new QGraphicsPolygonItem(QVector<QPointF>()
+                                                            <<QPointF(xCenter(firstGuest2), yBottom(day) + diff_y2)
+                                                            <<QPointF(xCenter(lastGuest2), yBottom(day) + diff_y2));
+                 scene->addItem(meetingLine2);
+            }
+
+        }
    QGraphicsScene* createSceneForGame(Game const& game, QObject* parent = 0)
    {
        QGraphicsScene* scene = new QGraphicsScene(parent);
-
+       std::vector<std::vector<HumanItem*> > humansMatrix(game.numDays(),std::vector<HumanItem*>(  game.numHumans(),nullptr));
        for(size_t d = 0; d < game.numDays(); ++d)
        {
            for(size_t h = 0; h < game.numHumans(); ++h)
            {
-               HumanItem* human = new HumanItem(QPoint(xLeft(h), yTop(d)));
-               if(game.numDays()-1 == d)
-               {
-                   human->setState(game.isInfected(d,h) ? HumanItem::ILL : HumanItem::NOT_ILL);
-               }
-               else if (game.numDays()-2 == d)
+
+               humansMatrix[d][h] = new HumanItem(QPoint(xLeft(h), yTop(d)));
+               HumanItem* human = humansMatrix[d][h];
+               if (game.numDays()-1 == d)
                {
                    human->setState(HumanItem::REQUESTABLE);
                }
@@ -54,45 +97,20 @@ namespace
                    human->setState(HumanItem::NOT_REQUESTABLE);
                }
                scene->addItem(human);
-               scene->connect(human, &HumanItem::statusRequested, [d,h,human,&game]()
+               scene->connect(human, &HumanItem::statusRequested, [d,h,human,&game,humansMatrix]()
                {
                   human->setState(game.isInfected(d,h) ? HumanItem::ILL : HumanItem::NOT_ILL);
+                  Q_ASSERT(humansMatrix[d-1][h] );
+                  if (d >= 1)
+                  {
+                      humansMatrix[d-1][h]->setState(HumanItem::REQUESTABLE);
+                  }
+
                });
-           }
-           if (0 < d && d < game.numDays()-1)
-           {
-               Game::meetings_t meetings = game.meetings(d);
-               Q_ASSERT(2 == meetings.size());
-               auto firstMeetings = meetings.at(0);
-               auto secondMeetings = meetings.at(1);
-               auto diff_y1 = 4;
-               auto diff_y2 = 14;
-               for(auto h : firstMeetings)
-               {
-                   auto* meetingLine = new QGraphicsPolygonItem(QVector<QPointF>()
-                                                                <<QPointF(xCenter(h), yTop(d)- diff_y1)
-                                                                <<QPointF(xCenter(h), yTop(d)- diff_y2));
-                   scene->addItem(meetingLine);
-               }
-               auto firstGuest1 = *std::min_element(firstMeetings.begin(), firstMeetings.end());
-               auto lastGuest1= *std::max_element(firstMeetings.begin(), firstMeetings.end());
-               auto meetingLine1 = new QGraphicsPolygonItem(QVector<QPointF>()
-                                                           <<QPointF(xCenter(firstGuest1), yTop(d) - diff_y2)
-                                                           <<QPointF(xCenter(lastGuest1) , yTop(d)-  diff_y2));
-               scene->addItem(meetingLine1);
-               for(auto h : secondMeetings)
-               {
-                   auto* meetingLine = new QGraphicsPolygonItem(QVector<QPointF>()
-                                                                <<QPointF(xCenter(h), yBottom(d) + diff_y1)
-                                                                <<QPointF(xCenter(h), yBottom(d) + diff_y2));
-                   scene->addItem(meetingLine);
-               }
-               auto firstGuest2 = *std::min_element(secondMeetings.begin(), secondMeetings.end());
-               auto lastGuest2= *std::max_element(secondMeetings.begin(), secondMeetings.end());
-               auto meetingLine2 = new QGraphicsPolygonItem(QVector<QPointF>()
-                                                           <<QPointF(xCenter(firstGuest2), yBottom(d) + diff_y2)
-                                                           <<QPointF(xCenter(lastGuest2), yBottom(d) + diff_y2));
-                scene->addItem(meetingLine2);
+
+               scene->connect(human, &HumanItem::statusRequested,
+                              std::bind(&drawMeeting, h, d, &game, scene));
+
            }
         }
        return scene;

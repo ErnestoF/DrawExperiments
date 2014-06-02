@@ -20,4 +20,7 @@ HEADERS  += mainwindow.h \
     game.h \
     humanitem.h
 
+OTHER_FILES += \
+    Tasks.txt
+
 
