@@ -23,7 +23,7 @@ namespace
     {
         Q_ASSERT(numDays > 2);
         auto result = Game::meetings_table_t(numDays, Game::meetings_t());
-        for (size_t d = 1; d < numDays; ++d )
+        for (size_t d = 1; d < numDays-1; ++d )
         {
             result[d]<<generateMeeting(numHumans)<<generateMeeting(numHumans);
         }
