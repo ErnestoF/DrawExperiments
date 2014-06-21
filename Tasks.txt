@@ -1,1 +1,5 @@
-- Think, where to hold a game logic. In the class game or somewhere else?
+- Write a class GameMatrix
+- Write class Server
+- Write class AbstractClient and RandomClient
+- Write App
+- Make Gui App
