@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 
-
+#include "defs.h"
 #include "humanitem.h"
 #include <QDebug>
 #include <QGraphicsEllipseItem>
@@ -95,20 +95,20 @@ namespace
                HumanItem* human = humansMatrix[d][h];
                if (game.numDays()-1 == d)
                {
-                   human->setState(HumanItem::REQUESTABLE);
+                   human->setState(REQUESTABLE);
                }
                else
                {
-                   human->setState(HumanItem::NOT_REQUESTABLE);
+                   human->setState(NOT_REQUESTABLE);
                }
                scene->addItem(human);
                scene->connect(human, &HumanItem::statusRequested, [d,h,human,&game,humansMatrix]()
                {
-                  human->setState(game.isInfected(d,h) ? HumanItem::ILL : HumanItem::NOT_ILL);
+                  human->setState(game.isInfected(d,h) ? ILL : NOT_ILL);
                   if (d >= 1)
                   {
                       Q_ASSERT(humansMatrix[d-1][h] );
-                      humansMatrix[d-1][h]->setState(HumanItem::REQUESTABLE);
+                      humansMatrix[d-1][h]->setState(REQUESTABLE);
                   }
 
                });

@@ -18,7 +18,8 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h \
     game.h \
-    humanitem.h
+    humanitem.h \
+    defs.h
 
 OTHER_FILES += \
     Tasks.txt

@@ -1,19 +1,14 @@
 #ifndef HUMANITEM_H
 #define HUMANITEM_H
 
+#include "defs.h"
+
 #include <QGraphicsItem>
 
 class HumanItem : public QObject, public QGraphicsItem
 {
     Q_OBJECT
 public:
-    enum State
-    {
-        NOT_REQUESTABLE,
-        REQUESTABLE,
-        ILL,
-        NOT_ILL
-    };
     explicit HumanItem(QPointF const& topLeft, QObject* p = 0, QGraphicsItem* parent = 0);
     static int humanWidth();
     static int humanHeight();
