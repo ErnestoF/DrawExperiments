@@ -35,7 +35,7 @@ namespace
         return xLeft(h) + HumanItem::humanWidth()/2;
     }
 
-    void drawMeeting(Game::human_t human, Game::day_t day, Game const* game, QGraphicsScene* scene)
+    void drawMeeting(human_t human, day_t day, Game const* game, QGraphicsScene* scene)
         {
             auto meetings = game->meetings(day);
             if(meetings.empty())

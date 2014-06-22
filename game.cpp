@@ -4,12 +4,12 @@
 #include <random>
 namespace
 {
-    Game::meeting_t generateMeeting(const size_t numHumans)
+    meeting_t generateMeeting(const size_t numHumans)
     {
-        Game::meeting_t meeting;
-         std::random_device rd;
+        meeting_t meeting;
+        std::random_device rd;
         std::default_random_engine generator(rd());
-        std::uniform_int_distribution<Game::human_t> distribution(0,numHumans-1);
+        std::uniform_int_distribution<human_t> distribution(0,numHumans-1);
         std::uniform_int_distribution<size_t> meetingsDistribution(2,5);
         const size_t numParticipants = meetingsDistribution(generator);
         while(static_cast<size_t>(meeting.size()) < numParticipants)
@@ -22,7 +22,7 @@ namespace
     Game::meetings_table_t generateMeetingsTable(const size_t numHumans, const size_t numDays)
     {
         Q_ASSERT(numDays > 2);
-        auto result = Game::meetings_table_t(numDays, Game::meetings_t());
+        auto result = Game::meetings_table_t(numDays, meetings_t());
         for (size_t d = 1; d < numDays-1; ++d )
         {
             result[d]<<generateMeeting(numHumans)<<generateMeeting(numHumans);
@@ -56,7 +56,7 @@ bool Game::isInfected(const day_t day, const human_t human) const
     return m_contagionTable[day][human];
 }
 
-Game::meetings_t Game::meetings(const day_t day, const human_t human) const
+meetings_t Game::meetings(const day_t day, const human_t human) const
 {
     Q_ASSERT(day < numDays());
     Q_ASSERT(human < numHumans());
@@ -71,7 +71,7 @@ Game::meetings_t Game::meetings(const day_t day, const human_t human) const
     return result;
 }
 
-Game::meetings_t Game::meetings(const Game::day_t day) const
+meetings_t Game::meetings(const day_t day) const
 {
     Q_ASSERT(day < numDays());
     return m_meetingsTable[day];

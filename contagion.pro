@@ -11,15 +11,19 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = contagion
 TEMPLATE = app
 QMAKE_CXXFLAGS  = -std=c++11
-SOURCES += main.cpp\
-        mainwindow.cpp \
-    game.cpp \
-    humanitem.cpp
 
-HEADERS  += mainwindow.h \
+SOURCES += game.cpp \
+    gameproxy.cpp \
+    humanitem.cpp \
+    main.cpp \
+    mainwindow.cpp \
+
+HEADERS  += defs.h \
     game.h \
+    gameproxy.h \
     humanitem.h \
-    defs.h
+    mainwindow.h \
+
 
 OTHER_FILES += \
     Tasks.txt
