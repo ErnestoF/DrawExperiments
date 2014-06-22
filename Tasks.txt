@@ -1,7 +1,4 @@
 - Write a class GameProxy :
-    - Finish getStatus
-    - setDiscovered
-    - getMeetings
     - todo in the bottom of the header.
 - Write class Server
 - Write class AbstractClient and RandomClient
