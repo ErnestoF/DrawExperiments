@@ -13,16 +13,18 @@ TEMPLATE = app
 QMAKE_CXXFLAGS  = -std=c++11
 
 SOURCES += game.cpp \
-    gameproxy.cpp \
     humanitem.cpp \
     main.cpp \
     mainwindow.cpp \
+    server.cpp \
+    gamestate.cpp
 
 HEADERS  += defs.h \
     game.h \
-    gameproxy.h \
     humanitem.h \
     mainwindow.h \
+    server.h \
+    gamestate.h
 
 
 OTHER_FILES += \

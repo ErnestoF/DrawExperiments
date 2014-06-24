@@ -1,6 +1,24 @@
-- Write a class GameProxy :
-    - todo in the bottom of the header.
+TODO NEXT
+    Implement Server::discoverState
+    Implement GameState::getMeetings.
+Tasks for M1
 - Write class Server
 - Write class AbstractClient and RandomClient
 - Write App
 - Make Gui App
+
+
+Milestones :
+
+M1 : The user can play on a local pc without a rival. The server logic is located on the same pc.
+
+M2 : The user can play on a local pc without a rival. The server logic is located on the remote host.
+
+M3 : The user can play on an Android phone without a rival. The server logic is located on the remote host.
+
+M4 : The user can play against a bot.
+
+
+
+M_n : The user can play on an Android/iPhone against another users and bots. The user can write and upload its
+        own bots which play against another users and bots. The bots and users can play for money.
