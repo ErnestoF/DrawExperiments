@@ -20,7 +20,15 @@ GameState Server::generateGame()
 
 void Server::discoverHuman(GameState &gameState, const human_t &human) const
 {
-    Q_UNUSED(gameState);
-    Q_UNUSED(human);
-    // todo implement
+    Q_ASSERT(m_game && m_game->numDays() == gameState.getNumDays() && m_game->numHumans() == gameState.getNumHumans());
+    auto numDays = gameState.getNumDays();
+    Q_ASSERT(numDays > 1);
+    for (size_t d = numDays - 1; d != 0; --d )
+    {
+        if (REQUESTABLE == gameState.getHumanState(human, d))
+        {
+            gameState.setGameState(human, d, m_game->isInfected(d,human) ? ILL : NOT_ILL);
+        }
+    }
+    Q_ASSERT(false); // we should not get here
 }
