@@ -17,14 +17,17 @@ SOURCES += game.cpp \
     main.cpp \
     mainwindow.cpp \
     server.cpp \
-    gamestate.cpp
+    gamestate.cpp \
+    randomclient.cpp
 
 HEADERS  += defs.h \
     game.h \
     humanitem.h \
     mainwindow.h \
     server.h \
-    gamestate.h
+    gamestate.h \
+    abstractclient.h \
+    randomclient.h
 
 
 OTHER_FILES += \
