@@ -1,9 +1,6 @@
 TODO NEXT
-    Implement Server::discoverState
-    Implement GameState::getMeetings.
-Tasks for M1
-- Write class Server
 - Write class AbstractClient and RandomClient
+Tasks for M1
 - Write App
 - Make Gui App
 

@@ -27,7 +27,7 @@ void Server::discoverHuman(GameState &gameState, const human_t &human) const
     {
         if (REQUESTABLE == gameState.getHumanState(human, d))
         {
-            gameState.setGameState(human, d, m_game->isInfected(d,human) ? ILL : NOT_ILL);
+            gameState.setGameState(human, d, m_game->isInfected(d,human) ? ILL : NOT_ILL, m_game->meetings(d, human));
         }
     }
     Q_ASSERT(false); // we should not get here
