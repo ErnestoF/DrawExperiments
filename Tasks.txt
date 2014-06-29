@@ -1,11 +1,11 @@
 TODO NEXT
 - Write App in main :
- * write a while loop until the finish guest will be discovered
  * extend the guess by a flag, which informs, that the bot wants to make a guess.
  * make the choice from the bot's guess set.
 
 
 Tasks for M1
+- Extract the App to the separate class. Name it GameSession.
 - Extend AbstractClient by makeFinalGuess.
 - Make Gui App
 

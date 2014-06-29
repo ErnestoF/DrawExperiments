@@ -16,6 +16,26 @@ bool isReady(GameState const& gameState)
     return false;
 }
 
+template <typename IteratorT>
+IteratorT pickRandom(IteratorT from, IteratorT to)
+{
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, std::distance(from, to) - 1);
+    std::advance(from, dis(gen));
+    return from;
+}
+
+template <typename Container>
+QString containerToString(Container const& container)
+{
+    QString result;
+    for (auto elem : container)
+    {
+        result.append(QString::number(elem)).append(" ");
+    }
+    return result;
+}
 int main(int argc, char *argv[])
 {
     Q_UNUSED(argc);
@@ -26,9 +46,11 @@ int main(int argc, char *argv[])
     size_t count = 0;
     while(!isReady(gameState))
     {
-        auto guess = bot.guess(gameState);
-        Q_ASSERT(!guess.empty());
-        server.discoverHuman(gameState, *guess.begin());
+        auto guessSet = bot.guess(gameState);
+        Q_ASSERT(!guessSet.empty());
+        auto nextGuess = *(pickRandom(guessSet.begin(), guessSet.end()));
+        qDebug()<< "Next guess " << nextGuess << " from " << containerToString(guessSet) ;
+        server.discoverHuman(gameState, nextGuess);
         ++count;
     }
     qDebug() << "Num Steps " << count;
