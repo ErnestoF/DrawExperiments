@@ -4,10 +4,10 @@
 #include <QList>
 enum State
 {
-    NOT_REQUESTABLE,
-    REQUESTABLE,
-    ILL,
-    NOT_ILL
+    NOT_REQUESTABLE, // 0
+    REQUESTABLE, // 1
+    ILL, // 2
+    NOT_ILL // 3
 };
 
 typedef size_t human_t;

@@ -2,7 +2,6 @@
 
 #include "defs.h"
 #include "humanitem.h"
-#include <QDebug>
 #include <QGraphicsEllipseItem>
 #include <QGraphicsScene>
 #include <QGraphicsPolygonItem>

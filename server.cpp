@@ -2,6 +2,7 @@
 
 #include "game.h"
 #include "gamestate.h"
+
 namespace
 {
 const size_t NUM_HUMANS = 10;
@@ -23,12 +24,13 @@ void Server::discoverHuman(GameState &gameState, const human_t &human) const
     Q_ASSERT(m_game && m_game->numDays() == gameState.getNumDays() && m_game->numHumans() == gameState.getNumHumans());
     auto numDays = gameState.getNumDays();
     Q_ASSERT(numDays > 1);
-    for (size_t d = numDays - 1; d != 0; --d )
+    for (size_t d = numDays - 1; ; --d )
     {
         if (REQUESTABLE == gameState.getHumanState(human, d))
         {
             gameState.setGameState(human, d, m_game->isInfected(d,human) ? ILL : NOT_ILL, m_game->meetings(d, human));
+            return;
         }
     }
-    Q_ASSERT(false); // we should not get here
+    Q_ASSERT(gameState.getHumanState(human,0) !=     NOT_REQUESTABLE);
 }
