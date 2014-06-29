@@ -1,6 +1,6 @@
 TODO NEXT
-- Extract the App to the separate class. Name it GameSession.
-
+- AbstractClient::name.
+- The GameSession can process several gamers. At the end it pushes the log message, who was the winner.
 
 Tasks for M1
 - Extend AbstractClient by makeFinalGuess.
