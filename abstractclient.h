@@ -8,6 +8,7 @@ class GameState;
 
 class AbstractClient
 {
+public:
    virtual std::set<human_t> guess(GameState const& gameState) const = 0;
 };
 

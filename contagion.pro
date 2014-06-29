@@ -12,7 +12,9 @@ TARGET = contagion
 TEMPLATE = app
 QMAKE_CXXFLAGS  = -std=c++11
 
-SOURCES += game.cpp \
+SOURCES += \
+    game.cpp \
+    gamesession.cpp \
     humanitem.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -20,8 +22,10 @@ SOURCES += game.cpp \
     gamestate.cpp \
     randomclient.cpp
 
-HEADERS  += defs.h \
+HEADERS  += \
+    defs.h \
     game.h \
+    gamesession.h \
     humanitem.h \
     mainwindow.h \
     server.h \
