@@ -41,23 +41,41 @@ namespace
 void GameSession::addClient(const AbstractClient *client)
 {
     Q_ASSERT(0 != client);
-    m_clients.append(client);
+    m_clients.push_back(client);
 }
 
 void GameSession::start()
 {
     Q_ASSERT(!m_clients.empty());
     GameState gameState = m_server.generateGame();
+    std::vector<GameState> gameStates(m_clients.size(), gameState);
     size_t count = 0;
-    auto bot = m_clients.front();
-    while(!isReady(gameState))
+    bool readyFlag = false;
+    while(!readyFlag)
     {
-        auto guessSet = bot->guess(gameState);
-        Q_ASSERT(!guessSet.empty());
-        auto nextGuess = *(pickRandom(guessSet.begin(), guessSet.end()));
-        qDebug()<< "Next guess " << nextGuess << " from " << containerToString(guessSet) ;
-        m_server.discoverHuman(gameState, nextGuess);
-        ++count;
+        size_t c = 0;
+        for ( auto const& client : m_clients)
+        {
+            auto guessSet = client->guess(gameStates[c]);
+            Q_ASSERT(!guessSet.empty());
+            auto nextGuess = *(pickRandom(guessSet.begin(), guessSet.end()));
+            m_server.discoverHuman(gameStates[c], nextGuess);
+            if (isReady(gameStates[c]))
+            {
+                readyFlag = true;
+            }
+            ++c;
+        }
+       ++count;
     }
     qDebug() << "Num Steps " << count;
+    QString winners;
+    for(int c = 0; c < m_clients.size(); ++c)
+    {
+        if(isReady(gameStates[c]))
+        {
+            winners.append(m_clients[c]->getName()).append(" ");
+        }
+    }
+    qDebug() <<" The winners are " << winners;
 }

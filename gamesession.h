@@ -2,7 +2,7 @@
 
 #include "abstractclient.h"
 #include "server.h"
-#include <QList>
+#include <QVector>
 
 class GameSession
 {
@@ -16,6 +16,6 @@ public:
   void start();
 
 private:
-  QList<AbstractClient const*> m_clients;
+  QVector<AbstractClient const*> m_clients;
   Server m_server;
 };

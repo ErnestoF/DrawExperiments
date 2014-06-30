@@ -5,7 +5,7 @@
 class RandomClient : public AbstractClient
 {
 public:
-    RandomClient();
+    RandomClient(QString const& name );
 
     std::set<human_t> guess(GameState const& gameState) const override;
 

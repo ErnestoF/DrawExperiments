@@ -1,11 +1,9 @@
 TODO NEXT
-- AbstractClient::name.
-- The GameSession can process several gamers. At the end it pushes the log message, who was the winner.
+- Make Gui Client
 
 Tasks for M1
 - Extend AbstractClient by makeFinalGuess.
 - Extend the guess by a flag, which informs, that the bot wants to make a guess.
-- Make Gui App
 
 
 Milestones :

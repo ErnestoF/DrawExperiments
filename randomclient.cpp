@@ -1,6 +1,7 @@
 #include "randomclient.h"
 #include "gamestate.h"
-RandomClient::RandomClient()
+RandomClient::RandomClient(const QString &name)
+    : AbstractClient(name)
 {
 }
 
