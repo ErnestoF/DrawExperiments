@@ -20,7 +20,8 @@ SOURCES += \
     mainwindow.cpp \
     server.cpp \
     gamestate.cpp \
-    randomclient.cpp
+    randomclient.cpp \
+    guiclient.cpp
 
 HEADERS  += \
     defs.h \
@@ -31,7 +32,8 @@ HEADERS  += \
     server.h \
     gamestate.h \
     abstractclient.h \
-    randomclient.h
+    randomclient.h \
+    guiclient.h
 
 
 OTHER_FILES += \
