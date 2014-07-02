@@ -15,4 +15,9 @@ typedef size_t day_t;
 typedef QSet<human_t> meeting_t;
 typedef QList<meeting_t> meetings_t;
 
+namespace constants
+{
+    const size_t NUM_DAYS = 10;
+    const size_t NUM_HUMANS = 10;
+}
 
