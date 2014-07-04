@@ -3,7 +3,6 @@
 #include "humanitem.h"
 
 #include <QGraphicsScene>
-#include <QGraphicsView>
 namespace
 {
     const uint16_t yOffset = 40;
@@ -79,20 +78,23 @@ namespace
 GuiClient::GuiClient(QString const& name)
     : AbstractClient(name)
     , m_gameScene(new QGraphicsScene())
-    , m_gameView(new QGraphicsView(m_gameScene))
 {
     populateScene();
 }
 
 GuiClient::~GuiClient()
 {
-    delete m_gameView;
     delete m_gameScene;
 }
 
 std::set<human_t> GuiClient::guess(const GameState &/*gameState*/) const
 {
     return std::set<human_t>();
+}
+
+QGraphicsScene *GuiClient::getScene()
+{
+    return m_gameScene;
 }
 
 void GuiClient::populateScene()

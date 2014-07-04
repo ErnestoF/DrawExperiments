@@ -4,7 +4,6 @@
 #include "abstractclient.h"
 
 class QGraphicsScene;
-class QGraphicsView;
 
 class GuiClient : public AbstractClient
 {
@@ -13,13 +12,12 @@ public:
 
     virtual ~GuiClient();
     std::set<human_t> guess(GameState const& gameState) const override;
-
+    QGraphicsScene* getScene();
 private: // methods
     void populateScene();
 
 private: // attributes
     QGraphicsScene* m_gameScene;
-    QGraphicsView* m_gameView;
 };
 
 #endif // GUICLIENT_H

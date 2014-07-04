@@ -1,10 +1,7 @@
 TODO NEXT
 - Make Gui Client
   * process the scene :
-    - draw initial state
-    - solve pointer problems(how should the scene and the view be stored)
-    - integrate gui client into the main window, test the appearance.
-    - process game state updates
+    - process game state updates : GuiClient::guess
   * write guess.
 Tasks for M1
 - Extend AbstractClient by makeFinalGuess.
