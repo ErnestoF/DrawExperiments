@@ -1,8 +1,10 @@
 #include "guiclient.h"
 
+#include "gamestate.h"
 #include "humanitem.h"
-
+#include "randomclient.h" // todo remove
 #include <QGraphicsScene>
+#include <QTimer> // todo remove
 namespace
 {
     const uint16_t yOffset = 40;
@@ -79,7 +81,7 @@ GuiClient::GuiClient(QString const& name)
     : AbstractClient(name)
     , m_gameScene(new QGraphicsScene())
 {
-    populateScene();
+    //populateScene();
 }
 
 GuiClient::~GuiClient()
@@ -87,9 +89,11 @@ GuiClient::~GuiClient()
     delete m_gameScene;
 }
 
-std::set<human_t> GuiClient::guess(const GameState &/*gameState*/) const
+std::set<human_t> GuiClient::guess(const GameState & gameState) const
 {
-    return std::set<human_t>();
+    drawGameState(gameState);
+    RandomClient proxy("Proxy");
+    return proxy.guess(gameState);
 }
 
 QGraphicsScene *GuiClient::getScene()
@@ -132,4 +136,20 @@ void GuiClient::populateScene()
         }
      }
 
+}
+
+void GuiClient::drawGameState(const GameState &gameState) const
+{
+    m_gameScene->clear();
+    m_gameScene->disconnect();
+    for(size_t d = 0; d < gameState.getNumDays(); ++d)
+    {
+        for(size_t h = 0; h < gameState.getNumHumans(); ++h)
+        {
+            HumanItem* human = new HumanItem(QPoint(xLeft(h), yTop(d, gameState.getNumDays())));
+            human->setState(gameState.getHumanState(h,d));
+            m_gameScene->addItem(human);
+            // todo make connection
+        }
+    }
 }

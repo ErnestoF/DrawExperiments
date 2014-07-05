@@ -15,9 +15,9 @@ public:
     QGraphicsScene* getScene();
 private: // methods
     void populateScene();
-
+    void drawGameState(GameState const& gameState) const;
 private: // attributes
-    QGraphicsScene* m_gameScene;
+    mutable QGraphicsScene* m_gameScene;
 };
 
 #endif // GUICLIENT_H
