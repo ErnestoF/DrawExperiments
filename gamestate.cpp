@@ -1,5 +1,7 @@
 #include "gamestate.h"
 
+#include <QString>
+
 GameState::GameState(const size_t numDays, const size_t numHumans)
     : m_stateMatrix(numDays, std::vector<State>(numHumans, NOT_REQUESTABLE))
     , m_meetings(numDays, meetings_t())
@@ -10,7 +12,7 @@ GameState::GameState(const size_t numDays, const size_t numHumans)
 
 State GameState::getHumanState(const human_t &human, const day_t &day) const
 {
-    Q_ASSERT(checkDimensions(human, day));
+    Q_ASSERT_X(checkDimensions(human, day), "GameState::getHumanState", QString("Human ").append(QString::number(human).append(" Day ").append(QString::number(day))).toLocal8Bit().data());
     return m_stateMatrix[day][human];
 }
 

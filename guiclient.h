@@ -1,9 +1,11 @@
 #ifndef GUICLIENT_H
 #define GUICLIENT_H
 
+#include "defs.h"
 #include "abstractclient.h"
 
 class QGraphicsScene;
+class QGraphicsView;
 
 class GuiClient : public AbstractClient
 {
@@ -15,9 +17,14 @@ public:
     QGraphicsScene* getScene();
 private: // methods
     void populateScene();
-    void drawGameState(GameState const& gameState) const;
+    void updateGameScene(GameState const& gameState) const;
+    void requestStatus(human_t humanId) const;
 private: // attributes
     mutable QGraphicsScene* m_gameScene;
+    QGraphicsView* m_view;
+    mutable bool m_editMode;
+    mutable human_t m_guessedHuman;
+
 };
 
 #endif // GUICLIENT_H

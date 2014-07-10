@@ -2,11 +2,13 @@
 
 #include "gamestate.h"
 #include "humanitem.h"
-#include "randomclient.h" // todo remove
+#include <QCoreApplication>
 #include <QGraphicsScene>
-#include <QTimer> // todo remove
+#include <QGraphicsView>
+#include <QDebug>
 namespace
 {
+
     const uint16_t yOffset = 40;
 
     int yBottom(const int d, const u_int16_t nDays)
@@ -80,8 +82,10 @@ namespace
 GuiClient::GuiClient(QString const& name)
     : AbstractClient(name)
     , m_gameScene(new QGraphicsScene())
+    , m_view(new QGraphicsView(m_gameScene))
+    , m_editMode(false)
 {
-    //populateScene();
+    m_view->showMaximized();
 }
 
 GuiClient::~GuiClient()
@@ -91,9 +95,15 @@ GuiClient::~GuiClient()
 
 std::set<human_t> GuiClient::guess(const GameState & gameState) const
 {
-    drawGameState(gameState);
-    RandomClient proxy("Proxy");
-    return proxy.guess(gameState);
+    updateGameScene(gameState);
+    m_editMode = true;
+    while(m_editMode)
+    {
+        QCoreApplication::processEvents();
+    }
+    std::set<human_t> result;
+    result.insert(m_guessedHuman);
+    return result;
 }
 
 QGraphicsScene *GuiClient::getScene()
@@ -101,47 +111,11 @@ QGraphicsScene *GuiClient::getScene()
     return m_gameScene;
 }
 
-void GuiClient::populateScene()
-{
-    std::vector<std::vector<HumanItem*> > humansMatrix(constants::NUM_DAYS,std::vector<HumanItem*>(  constants::NUM_HUMANS,nullptr));
-    for(size_t d = 0; d < constants::NUM_DAYS; ++d)
-    {
-        for(size_t h = 0; h < constants::NUM_HUMANS; ++h)
-        {
 
-            humansMatrix[d][h] = new HumanItem(QPoint(xLeft(h), yTop(d, constants::NUM_DAYS)));
-            HumanItem* human = humansMatrix[d][h];
-            if (constants::NUM_DAYS-1 == d)
-            {
-                human->setState(REQUESTABLE);
-            }
-            else
-            {
-                human->setState(NOT_REQUESTABLE);
-            }
-            m_gameScene->addItem(human);
-//               scene->connect(human, &HumanItem::statusRequested, [d,h,human,&game,humansMatrix]()
-//               {
-//                  human->setState(game.isInfected(d,h) ? ILL : NOT_ILL);
-//                  if (d >= 1)
-//                  {
-//                      Q_ASSERT(humansMatrix[d-1][h] );
-//                      humansMatrix[d-1][h]->setState(REQUESTABLE);
-//                  }
 
-//               }); // todo make connection
-
-            //scene->connect(human, &HumanItem::statusRequested, std::bind(&drawMeeting, h, d, &game, scene)); // todo make connections
-
-        }
-     }
-
-}
-
-void GuiClient::drawGameState(const GameState &gameState) const
+void GuiClient::updateGameScene(const GameState &gameState) const
 {
     m_gameScene->clear();
-    m_gameScene->disconnect();
     for(size_t d = 0; d < gameState.getNumDays(); ++d)
     {
         for(size_t h = 0; h < gameState.getNumHumans(); ++h)
@@ -149,7 +123,27 @@ void GuiClient::drawGameState(const GameState &gameState) const
             HumanItem* human = new HumanItem(QPoint(xLeft(h), yTop(d, gameState.getNumDays())));
             human->setState(gameState.getHumanState(h,d));
             m_gameScene->addItem(human);
+            QObject::connect(human, &HumanItem::statusRequested,
+                             [=]()
+            {
+                if(m_editMode)
+                {
+                    m_guessedHuman = h;
+                    m_editMode = false;
+                }
+            });
             // todo make connection
         }
     }
 }
+
+void GuiClient::requestStatus(human_t humanId) const
+{
+    if (m_editMode)
+    {
+        m_guessedHuman = humanId;
+        m_editMode = false;
+    }
+}
+
+

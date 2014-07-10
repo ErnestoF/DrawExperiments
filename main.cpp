@@ -4,7 +4,7 @@
 #include "randomclient.h"
 #include <QApplication>
 #include <QDebug>
-#include <QGraphicsView>
+
 int main(int argc, char *argv[])
 {
     Q_UNUSED(argc);
@@ -13,8 +13,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     GuiClient guiClient("GuiClient");
-    QGraphicsView view(guiClient.getScene());
-    view.show();
+
     GameSession session;
     RandomClient client1("RandomBot1");
     RandomClient client2("RandomBot2");
@@ -28,7 +27,6 @@ int main(int argc, char *argv[])
     session.addClient(&client5);
     session.addClient(&guiClient);
     session.start();
-
     return a.exec();
     //return 0;
 }
