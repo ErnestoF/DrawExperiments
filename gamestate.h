@@ -11,6 +11,7 @@ public:
 
     State getHumanState(human_t const& human, day_t const& day) const;
     meetings_t getMeetings(human_t const& human, day_t const& day) const;
+    meetings_t getMeetings(day_t const& day) const;
     size_t getNumDays() const;
     size_t getNumHumans() const;
     void setGameState(human_t const& human, day_t const& day, State state, meetings_t const& meetings);

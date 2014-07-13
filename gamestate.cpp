@@ -31,6 +31,12 @@ meetings_t GameState::getMeetings(const human_t &human, const day_t &day) const
     return result;
 }
 
+meetings_t GameState::getMeetings(const day_t &day) const
+{
+    Q_ASSERT(0 < day && day < getNumDays());
+    return m_meetings[day];
+}
+
 size_t GameState::getNumDays() const
 {
     return m_stateMatrix.size();

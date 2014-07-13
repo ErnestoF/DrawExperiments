@@ -38,7 +38,7 @@ namespace
         return result;
     }
 }
-void GameSession::addClient(const AbstractClient *client)
+void GameSession::addClient(AbstractClient *client)
 {
     Q_ASSERT(0 != client);
     m_clients.push_back(client);
@@ -75,6 +75,11 @@ void GameSession::start()
         if(isReady(gameStates[c]))
         {
             winners.append(m_clients[c]->getName()).append(" ");
+            m_clients[c]->tellGameResult(true);
+        }
+        else
+        {
+            m_clients[c]->tellGameResult(false);
         }
     }
     qDebug() <<" The winners are " << winners;

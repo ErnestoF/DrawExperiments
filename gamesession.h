@@ -7,7 +7,7 @@
 class GameSession
 {
 public:
-  void addClient(AbstractClient const* client);
+  void addClient(AbstractClient * client);
 
   /**
    * @brief start Starts the game session
@@ -16,6 +16,6 @@ public:
   void start();
 
 private:
-  QVector<AbstractClient const*> m_clients;
+  QVector<AbstractClient *> m_clients;
   Server m_server;
 };

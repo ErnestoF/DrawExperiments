@@ -18,6 +18,8 @@ public:
    {
        return m_name;
    }
+
+   virtual void tellGameResult(bool ){};
 private:
    QString m_name;
 };
