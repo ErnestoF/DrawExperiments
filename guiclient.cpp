@@ -11,7 +11,7 @@ namespace
 
     const uint16_t yOffset = 40;
 
-    int yBottom(const int d, const u_int16_t nDays)
+    int yBottom(const int d, const uint16_t nDays)
     {
       return  d == nDays - 1 ? HumanItem::humanHeight() : (HumanItem::humanHeight()+yOffset)*(nDays - d) - HumanItem::humanHeight();
     }
@@ -19,7 +19,7 @@ namespace
     {
         return h * HumanItem::humanWidth();
     }
-    int yTop(const int d, const u_int16_t nDays)
+    int yTop(const int d, const uint16_t nDays)
     {
 
         return yBottom(d, nDays) - HumanItem::humanHeight();
