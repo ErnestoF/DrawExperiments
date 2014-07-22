@@ -2,13 +2,16 @@
 #define RANDOMCLIENT_H
 
 #include "abstractclient.h"
+#include "gamestate.h"
 class RandomClient : public AbstractClient
 {
 public:
-    RandomClient(QString const& name );
+    RandomClient(QString const& name);
+    std::set<human_t> guess() const override;
+    void tellCurrentState(GameState const& gameState) override;
 
-    std::set<human_t> guess(GameState const& gameState) const override;
-
+private:
+    GameState m_currentState;
 };
 
 #endif // RANDOMCLIENT_H

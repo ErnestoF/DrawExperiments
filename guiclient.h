@@ -13,8 +13,9 @@ public:
     GuiClient(QString const& name);
 
     virtual ~GuiClient();
-    std::set<human_t> guess(GameState const& gameState) const override;
+    std::set<human_t> guess() const override;
     void tellGameResult(bool isWinner) override;
+    void tellCurrentState(GameState const& gameState) override;
     QGraphicsScene* getScene();
 private: // methods
     void populateScene();
@@ -22,7 +23,7 @@ private: // methods
     void requestStatus(human_t humanId) const;
     void drawMeeting(day_t day, const GameState &gameState) const;
 private: // attributes
-    mutable QGraphicsScene* m_gameScene;
+    QGraphicsScene* m_gameScene;
     QGraphicsView* m_view;
     mutable bool m_editMode;
     mutable human_t m_guessedHuman;

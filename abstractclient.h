@@ -12,7 +12,7 @@ public:
    AbstractClient(QString const& name)
        : m_name(name)
    {}
-   virtual std::set<human_t> guess(GameState const& gameState) const = 0;
+   virtual std::set<human_t> guess() const = 0;
 
    QString getName() const
    {
@@ -20,6 +20,8 @@ public:
    }
 
    virtual void tellGameResult(bool ){};
+
+   virtual void tellCurrentState(GameState const& gameState) = 0;
 private:
    QString m_name;
 };

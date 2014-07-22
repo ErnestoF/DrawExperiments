@@ -50,16 +50,21 @@ void GameSession::start()
     GameState gameState = m_server.generateGame();
     std::vector<GameState> gameStates(m_clients.size(), gameState);
     size_t count = 0;
+    for ( auto & client : m_clients)
+    {
+        client->tellCurrentState(gameState);
+    }
     bool readyFlag = false;
     while(!readyFlag)
     {
         size_t c = 0;
         for ( auto const& client : m_clients)
         {
-            auto guessSet = client->guess(gameStates[c]);
+            auto guessSet = client->guess();
             Q_ASSERT(!guessSet.empty());
             auto nextGuess = *(pickRandom(guessSet.begin(), guessSet.end()));
             m_server.discoverHuman(gameStates[c], nextGuess);
+            client->tellCurrentState(gameStates[c]);
             if (isReady(gameStates[c]))
             {
                 readyFlag = true;
