@@ -8,7 +8,8 @@ M1 : The user can play on a local pc without a rival. The server logic is locate
      - Extend the guess by a flag, which informs, that the bot wants to make a guess.
 
 M2 : The user can play on a local pc without a rival. The server logic is located on the remote host.
-
+    - The game state could be build from Google Proto Resource.
+    - Define several types of messages.
 M3 : The user can play on an Android phone without a rival. The server logic is located on the remote host.
 
 M4 : The user can play against a bot.
