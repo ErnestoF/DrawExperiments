@@ -4,6 +4,9 @@ Milestones :
 
 M1 : The user can play on a local pc without a rival. The server logic is located on the same pc.
      Remaining tasks for M1 :
+	 - Write class GuessReply
+	 - Extend the guess by a bool parameter : somebodyMadeFinalGuess
+	 - The meetings begin on the day 0. 
      - Extend AbstractClient by makeFinalGuess.
      - Extend the guess by a flag, which informs, that the bot wants to make a guess.
 
