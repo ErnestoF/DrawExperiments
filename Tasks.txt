@@ -1,17 +1,11 @@
 TODO NEXT
-- Make Gui Client
-  * process the scene :
-    - draw meetings.
-    - make the guess for the last guest possible. notify all guests after the game is finished.
-  * write guess.
-Tasks for M1
-- Extend AbstractClient by makeFinalGuess.
-- Extend the guess by a flag, which informs, that the bot wants to make a guess.
-
 
 Milestones :
 
 M1 : The user can play on a local pc without a rival. The server logic is located on the same pc.
+     Remaining tasks for M1 :
+     - Extend AbstractClient by makeFinalGuess.
+     - Extend the guess by a flag, which informs, that the bot wants to make a guess.
 
 M2 : The user can play on a local pc without a rival. The server logic is located on the remote host.
 

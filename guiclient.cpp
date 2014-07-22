@@ -45,9 +45,8 @@ GuiClient::~GuiClient()
     delete m_gameScene;
 }
 
-std::set<human_t> GuiClient::guess(const GameState & gameState) const
+std::set<human_t> GuiClient::guess() const
 {
-    updateGameScene(gameState);
     m_editMode = true;
     while(m_editMode)
     {
@@ -68,6 +67,11 @@ void GuiClient::tellGameResult(bool isWinner)
     {
         m_gameScene->addText("HAHAHA, LOOOSER");
     }
+}
+
+void GuiClient::tellCurrentState(const GameState &gameState)
+{
+    updateGameScene(gameState);
 }
 
 QGraphicsScene *GuiClient::getScene()
