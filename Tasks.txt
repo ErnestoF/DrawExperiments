@@ -1,13 +1,13 @@
 TODO NEXT
-    - Write the class GuessResponse
-    - Extend the signature of guess by somebodymadefinalguess
-    - The meetings begin on the day 0.
-    - Draw a button on the gui-client scene, informing, the client want to make a final guess.
-    - Update the server logic.
-    - Rename client -> player, server -> game moderator.
 Milestones :
 
 M1 : The user can play on a local pc without a rival. The server logic is located on the same pc.
+     Remaining tasks for M1 :
+     - Extend the signature of guess by somebodymadefinalguess
+     - The meetings begin on the day 0.
+     - Draw a button on the gui-client scene, informing, the client want to make a final guess.
+     - Update the server logic.
+     - Rename client -> player, server -> game moderator.
 
 M2 : The user can play on a local pc without a rival. The server logic is located on the remote host.
     - The game state could be build from Google Proto Resource.
