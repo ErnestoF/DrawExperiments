@@ -22,7 +22,8 @@ SOURCES += \
     server.cpp \
     gamestate.cpp \
     randomclient.cpp \
-    guiclient.cpp
+    guiclient.cpp \
+    guessresponse.cpp
 
 HEADERS  += \
     defs.h \
@@ -34,7 +35,8 @@ HEADERS  += \
     gamestate.h \
     abstractclient.h \
     randomclient.h \
-    guiclient.h
+    guiclient.h \
+    guessresponse.h
 
 
 OTHER_FILES += \
