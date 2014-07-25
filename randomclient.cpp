@@ -1,13 +1,15 @@
 #include "randomclient.h"
 #include "gamestate.h"
+#include "guessresponse.h"
 RandomClient::RandomClient(const QString &name)
     : AbstractClient(name)
     , m_currentState(constants::NUM_DAYS, constants::NUM_HUMANS)
 {
 }
 
-std::set<human_t> RandomClient::guess() const
+GuessResponse RandomClient::guess(bool finalGuessIsMade) const
 {
+    Q_UNUSED(finalGuessIsMade);
     std::set<human_t> result;
     for(human_t h = 0; h < m_currentState.getNumHumans(); ++h)
     {
@@ -16,7 +18,7 @@ std::set<human_t> RandomClient::guess() const
             result.insert(h);
         }
     }
-    return result;
+    return GuessResponse::makeRegularGuess(result);
 }
 
 void RandomClient::tellCurrentState(const GameState &gameState)

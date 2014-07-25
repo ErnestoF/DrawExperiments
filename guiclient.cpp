@@ -1,11 +1,13 @@
 #include "guiclient.h"
 
 #include "gamestate.h"
+#include "guessresponse.h"
 #include "humanitem.h"
 #include <QCoreApplication>
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QDebug>
+#include <QCheckBox>
 namespace
 {
 
@@ -45,8 +47,9 @@ GuiClient::~GuiClient()
     delete m_gameScene;
 }
 
-std::set<human_t> GuiClient::guess() const
+GuessResponse GuiClient::guess(bool finalGuessIsMade) const
 {
+    Q_UNUSED(finalGuessIsMade);
     m_editMode = true;
     while(m_editMode)
     {
@@ -54,7 +57,7 @@ std::set<human_t> GuiClient::guess() const
     }
     std::set<human_t> result;
     result.insert(m_guessedHuman);
-    return result;
+    return GuessResponse::makeRegularGuess(result);
 }
 
 void GuiClient::tellGameResult(bool isWinner)
@@ -81,7 +84,7 @@ QGraphicsScene *GuiClient::getScene()
 
 
 
-void GuiClient::updateGameScene(const GameState &gameState) const
+void GuiClient::updateGameScene(const GameState &gameState)
 {
     m_gameScene->clear();
     for(size_t d = 0; d < gameState.getNumDays(); ++d)
@@ -106,6 +109,9 @@ void GuiClient::updateGameScene(const GameState &gameState) const
             drawMeeting(d, gameState);
         }
     }
+    checkBox = new QCheckBox;
+    m_gameScene->addWidget(checkBox);
+    checkBox->move(-50,0);
 }
 
 void GuiClient::requestStatus(human_t humanId) const

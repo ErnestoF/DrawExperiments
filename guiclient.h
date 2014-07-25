@@ -4,6 +4,7 @@
 #include "defs.h"
 #include "abstractclient.h"
 
+class QCheckBox;
 class QGraphicsScene;
 class QGraphicsView;
 
@@ -13,13 +14,13 @@ public:
     GuiClient(QString const& name);
 
     virtual ~GuiClient();
-    std::set<human_t> guess() const override;
+    GuessResponse guess(bool finalGuessIsMade) const override;
     void tellGameResult(bool isWinner) override;
     void tellCurrentState(GameState const& gameState) override;
     QGraphicsScene* getScene();
 private: // methods
     void populateScene();
-    void updateGameScene(GameState const& gameState) const;
+    void updateGameScene(GameState const& gameState);
     void requestStatus(human_t humanId) const;
     void drawMeeting(day_t day, const GameState &gameState) const;
 private: // attributes
@@ -27,6 +28,7 @@ private: // attributes
     QGraphicsView* m_view;
     mutable bool m_editMode;
     mutable human_t m_guessedHuman;
+    QCheckBox* checkBox;
 
 };
 

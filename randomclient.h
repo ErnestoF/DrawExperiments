@@ -7,7 +7,7 @@ class RandomClient : public AbstractClient
 {
 public:
     RandomClient(QString const& name);
-    std::set<human_t> guess() const override;
+    GuessResponse guess(bool finalGuessIsMade) const override;
     void tellCurrentState(GameState const& gameState) override;
 
 private:

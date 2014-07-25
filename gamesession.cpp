@@ -1,6 +1,7 @@
 #include "gamesession.h"
 
 #include "gamestate.h"
+#include "guessresponse.h"
 #include <QDebug>
 #include <QString>
 namespace
@@ -60,9 +61,10 @@ void GameSession::start()
         size_t c = 0;
         for ( auto const& client : m_clients)
         {
-            auto guessSet = client->guess();
-            Q_ASSERT(!guessSet.empty());
-            auto nextGuess = *(pickRandom(guessSet.begin(), guessSet.end()));
+            auto guessResponse = client->guess(false);
+            auto guessedHumans = guessResponse.getRegularGuess();
+            Q_ASSERT(!guessedHumans.empty());
+            auto nextGuess = *(pickRandom(guessedHumans.begin(), guessedHumans.end()));
             m_server.discoverHuman(gameStates[c], nextGuess);
             client->tellCurrentState(gameStates[c]);
             if (isReady(gameStates[c]))

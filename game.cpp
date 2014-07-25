@@ -23,7 +23,7 @@ namespace
     {
         Q_ASSERT(numDays > 2);
         auto result = Game::meetings_table_t(numDays, meetings_t());
-        for (size_t d = 1; d < numDays-1; ++d )
+        for (size_t d = 0; d < numDays-1; ++d )
         {
             result[d]<<generateMeeting(numHumans)<<generateMeeting(numHumans);
         }
@@ -89,11 +89,14 @@ Game Game::generateGame(const size_t numHumans, const size_t numDays)
     Q_ASSERT(firstInfectedHuman < numHumans);
     result.m_contagionTable[0][firstInfectedHuman] = true;
     result.m_meetingsTable = generateMeetingsTable(numHumans, numDays);
-    for(day_t d = 1; d < result.numDays()-1; ++d)
+    for(day_t d = 0; d < result.numDays()-1; ++d)
     {
         for(human_t h = 0; h < result.numHumans(); ++h)
         {
-            result.m_contagionTable[d][h] |= result.m_contagionTable[d-1][h];
+            if (0 < d )
+            {
+                result.m_contagionTable[d][h] |= result.m_contagionTable[d-1][h];
+            }
         }
         for(auto m : result.m_meetingsTable[d])
         {
