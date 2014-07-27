@@ -33,7 +33,7 @@ meetings_t GameState::getMeetings(const human_t &human, const day_t &day) const
 
 meetings_t GameState::getMeetings(const day_t &day) const
 {
-    Q_ASSERT(0 < day && day < getNumDays());
+    Q_ASSERT(0 <= day && day < getNumDays());
     return m_meetings[day];
 }
 

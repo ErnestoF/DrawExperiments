@@ -3,10 +3,12 @@
 
 #include "defs.h"
 #include "abstractclient.h"
-
+#include <list>
+class HumanItem;
 class QCheckBox;
 class QGraphicsScene;
 class QGraphicsView;
+class QGraphicsItemGroup;
 
 class GuiClient : public AbstractClient
 {
@@ -22,13 +24,15 @@ private: // methods
     void populateScene();
     void updateGameScene(GameState const& gameState);
     void requestStatus(human_t humanId) const;
-    void drawMeeting(day_t day, const GameState &gameState) const;
+    void drawMeeting(day_t day, const GameState &gameState);
 private: // attributes
     QGraphicsScene* m_gameScene;
     QGraphicsView* m_view;
     mutable bool m_editMode;
     mutable human_t m_guessedHuman;
-    QCheckBox* checkBox;
+    QCheckBox* m_doFinalGuessCheckBox;
+    std::vector<std::vector<HumanItem*> > m_humanItemMatrix;
+    std::list<QGraphicsItemGroup*> m_meetings;
 
 };
 
