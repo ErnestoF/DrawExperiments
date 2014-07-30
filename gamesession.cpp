@@ -61,17 +61,40 @@ void GameSession::start()
         size_t c = 0;
         for ( auto const& client : m_clients)
         {
-            auto guessResponse = client->guess(false);
-            auto guessedHumans = guessResponse.getRegularGuess();
-            Q_ASSERT(!guessedHumans.empty());
-            auto nextGuess = *(pickRandom(guessedHumans.begin(), guessedHumans.end()));
-            m_server.discoverHuman(gameStates[c], nextGuess);
-            client->tellCurrentState(gameStates[c]);
-            if (isReady(gameStates[c]))
+            auto guessResponse = client->guess();
+            if(guessResponse.isFinalGuess())
             {
-                readyFlag = true;
+                auto finalGuess = guessResponse.getFinalGuess();
+
+                while(gameStates[c].getHumanState(finalGuess, 0) != ILL &&
+                      gameStates[c].getHumanState(finalGuess, 0) != NOT_ILL)
+                {
+                    m_server.discoverHuman(gameStates[c], finalGuess);
+                }
+                if (gameStates[c].getHumanState(finalGuess, 0) == ILL)
+                {
+                    client->tellGameResult(false);
+                }
+                else
+                {
+                    client->tellGameResult(true);
+                    readyFlag = true;
+                }
+
             }
-            ++c;
+            else
+            {
+                auto guessedHumans = guessResponse.getRegularGuess();
+                Q_ASSERT(!guessedHumans.empty());
+                auto nextGuess = *(pickRandom(guessedHumans.begin(), guessedHumans.end()));
+                m_server.discoverHuman(gameStates[c], nextGuess);
+                client->tellCurrentState(gameStates[c]);
+                if (isReady(gameStates[c]))
+                {
+                    readyFlag = true;
+                }
+                ++c;
+            }
         }
        ++count;
     }

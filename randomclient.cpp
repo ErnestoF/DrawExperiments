@@ -7,9 +7,8 @@ RandomClient::RandomClient(const QString &name)
 {
 }
 
-GuessResponse RandomClient::guess(bool finalGuessIsMade) const
+GuessResponse RandomClient::guess() const
 {
-    Q_UNUSED(finalGuessIsMade);
     std::set<human_t> result;
     for(human_t h = 0; h < m_currentState.getNumHumans(); ++h)
     {

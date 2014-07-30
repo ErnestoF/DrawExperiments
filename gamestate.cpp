@@ -69,5 +69,5 @@ void GameState::setGameState(const human_t &human, const day_t &day, State state
 
 bool GameState::checkDimensions(const human_t &human, const day_t &day) const
 {
-    return human < getNumHumans() && day < getNumDays();
+    return human < getNumHumans() &&  day < getNumDays();
 }

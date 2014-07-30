@@ -16,7 +16,7 @@ public:
     GuiClient(QString const& name);
 
     virtual ~GuiClient();
-    GuessResponse guess(bool finalGuessIsMade) const override;
+    GuessResponse guess() const override;
     void tellGameResult(bool isWinner) override;
     void tellCurrentState(GameState const& gameState) override;
     QGraphicsScene* getScene();

@@ -12,7 +12,7 @@ public:
    AbstractClient(QString const& name)
        : m_name(name)
    {}
-   virtual GuessResponse guess(bool finalGuessIsMade) const = 0;
+   virtual GuessResponse guess() const = 0;
 
    QString getName() const
    {

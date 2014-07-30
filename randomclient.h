@@ -7,7 +7,7 @@ class RandomClient : public AbstractClient
 {
 public:
     RandomClient(QString const& name);
-    GuessResponse guess(bool finalGuessIsMade) const override;
+    GuessResponse guess() const override;
     void tellCurrentState(GameState const& gameState) override;
 
 private:

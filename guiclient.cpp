@@ -69,9 +69,8 @@ GuiClient::~GuiClient()
     delete m_gameScene;
 }
 
-GuessResponse GuiClient::guess(bool finalGuessIsMade) const
+GuessResponse GuiClient::guess() const
 {
-    Q_UNUSED(finalGuessIsMade);
     m_editMode = true;
     while(m_editMode)
     {
@@ -79,7 +78,8 @@ GuessResponse GuiClient::guess(bool finalGuessIsMade) const
     }
     std::set<human_t> result;
     result.insert(m_guessedHuman);
-    return GuessResponse::makeRegularGuess(result);
+    return m_doFinalGuessCheckBox->isChecked() ? GuessResponse::makeFinalGuess(m_guessedHuman)
+                                  :GuessResponse::makeRegularGuess(result);
 }
 
 void GuiClient::tellGameResult(bool isWinner)

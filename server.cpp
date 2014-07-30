@@ -18,7 +18,7 @@ void Server::discoverHuman(GameState &gameState, const human_t &human) const
     Q_ASSERT(m_game && m_game->numDays() == gameState.getNumDays() && m_game->numHumans() == gameState.getNumHumans());
     auto numDays = gameState.getNumDays();
     Q_ASSERT(numDays > 1);
-    for (size_t d = numDays - 1; ; --d )
+    for(size_t d = 0; d < numDays; ++d)
     {
         if (REQUESTABLE == gameState.getHumanState(human, d))
         {
@@ -26,5 +26,5 @@ void Server::discoverHuman(GameState &gameState, const human_t &human) const
             return;
         }
     }
-    Q_ASSERT(gameState.getHumanState(human,0) !=     NOT_REQUESTABLE);
+    Q_ASSERT(gameState.getHumanState(human,0) != NOT_REQUESTABLE);
 }
