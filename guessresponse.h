@@ -6,24 +6,24 @@
 class GuessResponse
 {
 public:
-    static GuessResponse makeFinalGuess(human_t const& finalGuess);
-    static GuessResponse makeRegularGuess(std::set<human_t> const& regularGuess);
+    static GuessResponse makeFinalGuess(Human const& finalGuess);
+    static GuessResponse makeRegularGuess(std::set<Human> const& regularGuess);
 
     bool isFinalGuess() const;
 
-    std::set<human_t> getRegularGuess() const;
+    std::set<Human> getRegularGuess() const;
 
-    human_t getFinalGuess() const;
+    Human getFinalGuess() const;
 
 private:
     GuessResponse(bool makeFinalGuess);
-    void setFinalGuess(human_t const& finalGuess);
-    void setRegularGuess(std::set<human_t> const& regularGuess);
+    void setFinalGuess(Human const& finalGuess);
+    void setRegularGuess(std::set<Human> const& regularGuess);
 
 
 private:
     bool m_isFinalGuess;
-    std::set<human_t> m_guessedHumans;
+    std::set<Human> m_guessedHumans;
 };
 
 #endif // GUESSRESPONSE_H

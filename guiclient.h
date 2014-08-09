@@ -23,13 +23,13 @@ public:
 private: // methods
     void populateScene();
     void updateGameScene(GameState const& gameState);
-    void requestStatus(human_t humanId) const;
-    void drawMeeting(day_t day, const GameState &gameState);
+    void requestStatus(Human human) const;
+    void drawMeeting(Day day, const GameState &gameState);
 private: // attributes
     QGraphicsScene* m_gameScene;
     QGraphicsView* m_view;
     mutable bool m_editMode;
-    mutable human_t m_guessedHuman;
+    mutable Human m_guessedHuman;
     QCheckBox* m_doFinalGuessCheckBox;
     std::vector<std::vector<HumanItem*> > m_humanItemMatrix;
     std::list<QGraphicsItemGroup*> m_meetings;

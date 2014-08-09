@@ -38,11 +38,12 @@ GuiClient::GuiClient(QString const& name)
     , m_gameScene(new QGraphicsScene())
     , m_view(new QGraphicsView(m_gameScene))
     , m_editMode(false)
+    , m_guessedHuman(0)
     , m_humanItemMatrix(constants::NUM_DAYS, std::vector<HumanItem*>(constants::NUM_HUMANS, nullptr))
 {
     m_view->showMaximized();
-    for(day_t d = 0; d < constants::NUM_DAYS; ++d)
-        for(human_t h = 0; h < constants::NUM_HUMANS; ++h)
+    for(auto d : constants::DAYS)
+        for(auto h : constants::HUMANS)
         {
             m_humanItemMatrix[d][h] = new HumanItem(QPoint(xLeft(h), yTop(d, constants::NUM_DAYS)));
             m_humanItemMatrix[d][h]->setState(NOT_REQUESTABLE);
@@ -76,7 +77,7 @@ GuessResponse GuiClient::guess() const
     {
         QCoreApplication::processEvents();
     }
-    std::set<human_t> result;
+    std::set<Human> result;
     result.insert(m_guessedHuman);
     return m_doFinalGuessCheckBox->isChecked() ? GuessResponse::makeFinalGuess(m_guessedHuman)
                                   :GuessResponse::makeRegularGuess(result);
@@ -108,12 +109,10 @@ QGraphicsScene *GuiClient::getScene()
 
 void GuiClient::updateGameScene(const GameState &gameState)
 {
-    Q_ASSERT(constants::NUM_DAYS == gameState.getNumDays());
-    Q_ASSERT(constants::NUM_HUMANS == gameState.getNumHumans());
     m_meetings.clear();
-    for(size_t d = 0; d < gameState.getNumDays(); ++d)
+    for(auto d  : constants::DAYS)
     {
-        for(size_t h = 0; h < gameState.getNumHumans(); ++h)
+        for(auto h : constants::HUMANS)
         {
             m_humanItemMatrix[d][h]->setState(gameState.getHumanState(h,d));
         }
@@ -121,7 +120,7 @@ void GuiClient::updateGameScene(const GameState &gameState)
     }
 }
 
-void GuiClient::requestStatus(human_t humanId) const
+void GuiClient::requestStatus(Human humanId) const
 {
     if (m_editMode)
     {
@@ -130,7 +129,7 @@ void GuiClient::requestStatus(human_t humanId) const
     }
 }
 
-void GuiClient::drawMeeting(day_t day, const GameState &gameState)
+void GuiClient::drawMeeting(Day day, const GameState &gameState)
 {
     auto meetings = gameState.getMeetings(day);
     if(meetings.empty())
@@ -143,20 +142,19 @@ void GuiClient::drawMeeting(day_t day, const GameState &gameState)
     auto firstMeetings = meetings.at(0);
     auto diff_y1 = 4;
     auto diff_y2 = 14;
-    const auto nDays = gameState.getNumDays();
     QGraphicsItemGroup* firstMeetingGroup = new QGraphicsItemGroup;
     for(auto h : firstMeetings)
     {
         auto* meetingLine = new QGraphicsPolygonItem(QVector<QPointF>()
-                                                     <<QPointF(xCenter(h), yTop(day, nDays)- diff_y1)
-                                                     <<QPointF(xCenter(h), yTop(day, nDays)- diff_y2));
+                                                     <<QPointF(xCenter(h), yTop(day, constants::NUM_DAYS)- diff_y1)
+                                                     <<QPointF(xCenter(h), yTop(day, constants::NUM_DAYS)- diff_y2));
         firstMeetingGroup->addToGroup(meetingLine);
     }
     auto firstGuest1 = *std::min_element(firstMeetings.begin(), firstMeetings.end());
     auto lastGuest1= *std::max_element(firstMeetings.begin(), firstMeetings.end());
     auto meetingLine1 = new QGraphicsPolygonItem(QVector<QPointF>()
-                                                 <<QPointF(xCenter(firstGuest1), yTop(day, nDays) - diff_y2)
-                                                 <<QPointF(xCenter(lastGuest1) , yTop(day, nDays)-  diff_y2));
+                                                 <<QPointF(xCenter(firstGuest1), yTop(day, constants::NUM_DAYS) - diff_y2)
+                                                 <<QPointF(xCenter(lastGuest1) , yTop(day, constants::NUM_DAYS)-  diff_y2));
     firstMeetingGroup->addToGroup(meetingLine1);
     m_gameScene->addItem(firstMeetingGroup);
     m_meetings.push_back(firstMeetingGroup);
@@ -167,15 +165,15 @@ void GuiClient::drawMeeting(day_t day, const GameState &gameState)
         for(auto h : secondMeetings)
         {
             auto* meetingLine = new QGraphicsPolygonItem(QVector<QPointF>()
-                                                         <<QPointF(xCenter(h), yBottom(day, nDays) + diff_y1)
-                                                         <<QPointF(xCenter(h), yBottom(day, nDays) + diff_y2));
+                                                         <<QPointF(xCenter(h), yBottom(day, constants::NUM_DAYS) + diff_y1)
+                                                         <<QPointF(xCenter(h), yBottom(day, constants::NUM_DAYS) + diff_y2));
             secondMeetingsGroup->addToGroup(meetingLine);
         }
         auto firstGuest2 = *std::min_element(secondMeetings.begin(), secondMeetings.end());
         auto lastGuest2= *std::max_element(secondMeetings.begin(), secondMeetings.end());
         auto meetingLine2 = new QGraphicsPolygonItem(QVector<QPointF>()
-                                                    <<QPointF(xCenter(firstGuest2), yBottom(day, nDays) + diff_y2)
-                                                    <<QPointF(xCenter(lastGuest2), yBottom(day, nDays) + diff_y2));
+                                                    <<QPointF(xCenter(firstGuest2), yBottom(day, constants::NUM_DAYS) + diff_y2)
+                                                    <<QPointF(xCenter(lastGuest2), yBottom(day, constants::NUM_DAYS) + diff_y2));
         secondMeetingsGroup->addToGroup(meetingLine2);
         m_gameScene->addItem(secondMeetingsGroup);
         m_meetings.push_back(secondMeetingsGroup);

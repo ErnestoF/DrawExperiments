@@ -23,7 +23,8 @@ SOURCES += \
     gamestate.cpp \
     randomclient.cpp \
     guiclient.cpp \
-    guessresponse.cpp
+    guessresponse.cpp \
+    defs.cpp
 
 HEADERS  += \
     defs.h \

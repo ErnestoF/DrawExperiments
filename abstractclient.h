@@ -19,7 +19,7 @@ public:
        return m_name;
    }
 
-   virtual void tellGameResult(bool ){};
+   virtual void tellGameResult(bool ){}
 
    virtual void tellCurrentState(GameState const& gameState) = 0;
 private:

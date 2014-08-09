@@ -3,16 +3,16 @@
 #include "guessresponse.h"
 RandomClient::RandomClient(const QString &name)
     : AbstractClient(name)
-    , m_currentState(constants::NUM_DAYS, constants::NUM_HUMANS)
+    , m_currentState()
 {
 }
 
 GuessResponse RandomClient::guess() const
 {
-    std::set<human_t> result;
-    for(human_t h = 0; h < m_currentState.getNumHumans(); ++h)
+    std::set<Human> result;
+    for(auto h : constants::HUMANS)
     {
-        if (m_currentState.getHumanState(h,0) == REQUESTABLE ||  m_currentState.getHumanState(h,0) == NOT_REQUESTABLE)
+        if (m_currentState.getHumanState(h,Day(0)) == REQUESTABLE ||  m_currentState.getHumanState(h,Day(0)) == NOT_REQUESTABLE)
         {
             result.insert(h);
         }

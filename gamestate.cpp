@@ -2,23 +2,21 @@
 
 #include <QString>
 
-GameState::GameState(const size_t numDays, const size_t numHumans)
-    : m_stateMatrix(numDays, std::vector<State>(numHumans, NOT_REQUESTABLE))
-    , m_meetings(numDays, meetings_t())
+using namespace constants;
+GameState::GameState()
+    : m_stateMatrix(NUM_DAYS, std::vector<State>(NUM_HUMANS, NOT_REQUESTABLE))
+    , m_meetings(NUM_DAYS, meetings_t())
 {
-    Q_ASSERT(numDays > 2);
-    m_stateMatrix[numDays - 1] = std::vector<State>(numHumans, REQUESTABLE);
+    m_stateMatrix[NUM_DAYS - 1] = std::vector<State>(NUM_HUMANS, REQUESTABLE);
 }
 
-State GameState::getHumanState(const human_t &human, const day_t &day) const
+State GameState::getHumanState(const Human human, const Day day) const
 {
-    Q_ASSERT_X(checkDimensions(human, day), "GameState::getHumanState", QString("Human ").append(QString::number(human).append(" Day ").append(QString::number(day))).toLocal8Bit().data());
     return m_stateMatrix[day][human];
 }
 
-meetings_t GameState::getMeetings(const human_t &human, const day_t &day) const
+meetings_t GameState::getMeetings(const Human human, const Day day) const
 {
-    Q_ASSERT(checkDimensions(human, day));
     auto meetingsOnDay = m_meetings[day];
     meetings_t result;
     for ( auto m : meetingsOnDay)
@@ -31,27 +29,15 @@ meetings_t GameState::getMeetings(const human_t &human, const day_t &day) const
     return result;
 }
 
-meetings_t GameState::getMeetings(const day_t &day) const
+meetings_t GameState::getMeetings(const Day day) const
 {
-    Q_ASSERT(0 <= day && day < getNumDays());
     return m_meetings[day];
 }
 
-size_t GameState::getNumDays() const
-{
-    return m_stateMatrix.size();
-}
 
-size_t GameState::getNumHumans() const
-{
-    Q_ASSERT(!m_stateMatrix.empty());
-    return m_stateMatrix.front().size();
-}
-
-void GameState::setGameState(const human_t &human, const day_t &day, State state, meetings_t const& meetings)
+void GameState::setGameState(const Human human, const Day day, State state, meetings_t const& meetings)
 {
     Q_ASSERT(NOT_REQUESTABLE != state && REQUESTABLE != state);
-    Q_ASSERT(checkDimensions(human, day));
     Q_ASSERT(REQUESTABLE == getHumanState(human, day));
     m_stateMatrix[day][human] = state;
     if(day > 0)
@@ -65,9 +51,4 @@ void GameState::setGameState(const human_t &human, const day_t &day, State state
             m_meetings[day].append(m);
         }
     }
-}
-
-bool GameState::checkDimensions(const human_t &human, const day_t &day) const
-{
-    return human < getNumHumans() &&  day < getNumDays();
 }

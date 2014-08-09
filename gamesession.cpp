@@ -8,9 +8,9 @@ namespace
 {
     bool isReady(GameState const& gameState)
     {
-        for (size_t h = 0; h < gameState.getNumHumans(); ++h)
+        for (auto human : constants::HUMANS)
         {
-            if(ILL == gameState.getHumanState(h,0))
+            if(ILL == gameState.getHumanState(human,Day(0)))
             {
                 return true;
             }
@@ -66,12 +66,12 @@ void GameSession::start()
             {
                 auto finalGuess = guessResponse.getFinalGuess();
 
-                while(gameStates[c].getHumanState(finalGuess, 0) != ILL &&
-                      gameStates[c].getHumanState(finalGuess, 0) != NOT_ILL)
+                while(gameStates[c].getHumanState(finalGuess, Day(0)) != ILL &&
+                      gameStates[c].getHumanState(finalGuess, Day(0)) != NOT_ILL)
                 {
                     m_server.discoverHuman(gameStates[c], finalGuess);
                 }
-                if (gameStates[c].getHumanState(finalGuess, 0) == ILL)
+                if (gameStates[c].getHumanState(finalGuess, Day(0)) == ILL)
                 {
                     client->tellGameResult(false);
                 }

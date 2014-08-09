@@ -7,17 +7,15 @@
 class GameState
 {
 public:
-    GameState(const size_t numDays, const size_t numHumans);
+    GameState();
 
-    State getHumanState(human_t const& human, day_t const& day) const;
-    meetings_t getMeetings(human_t const& human, day_t const& day) const;
-    meetings_t getMeetings(day_t const& day) const;
-    size_t getNumDays() const;
-    size_t getNumHumans() const;
-    void setGameState(human_t const& human, day_t const& day, State state, meetings_t const& meetings);
+    State getHumanState(Human const human, Day const day) const;
+    meetings_t getMeetings(Human const human, Day const day) const;
+    meetings_t getMeetings(Day const day) const;
+    void setGameState(Human const human, Day const day, State state, meetings_t const& meetings);
 
 private:
-    bool checkDimensions(const human_t& human, const day_t& day) const;
+    bool checkDimensions(const Human human, const Day day) const;
 
 private:
     typedef std::vector<std::vector<State> > StateMatrix;

@@ -2,6 +2,7 @@
 #define SERVER_H
 
 #include "defs.h"
+#include "game.h"
 #include <memory>
 
 class GameState;
@@ -10,15 +11,14 @@ class Game;
 class Server
 {
 public:
-    Server();
 
     GameState generateGame();
 
-    void discoverHuman(GameState& gameState, human_t const& human) const;
+    void discoverHuman(GameState& gameState, Human const human) const;
 
 private:
 
-    std::shared_ptr<Game> m_game;
+    std::unique_ptr<Game> m_game;
 };
 
 #endif // SERVER_H
