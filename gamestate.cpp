@@ -5,7 +5,6 @@
 using namespace constants;
 GameState::GameState()
     : m_stateMatrix(NUM_DAYS, std::vector<State>(NUM_HUMANS, NOT_REQUESTABLE))
-    , m_meetings(NUM_DAYS, meetings_t())
 {
     m_stateMatrix[NUM_DAYS - 1] = std::vector<State>(NUM_HUMANS, REQUESTABLE);
 }
@@ -15,24 +14,11 @@ State GameState::getHumanState(const Human human, const Day day) const
     return m_stateMatrix[day][human];
 }
 
-meetings_t GameState::getMeetings(const Human human, const Day day) const
+meetings_t GameState::getMeetings() const
 {
-    auto meetingsOnDay = m_meetings[day];
-    meetings_t result;
-    for ( auto m : meetingsOnDay)
-    {
-        if (m.contains(human))
-        {
-            result.append(m);
-        }
-    }
-    return result;
+  return m_meetings;
 }
 
-meetings_t GameState::getMeetings(const Day day) const
-{
-    return m_meetings[day];
-}
 
 
 void GameState::setGameState(const Human human, const Day day, State state, meetings_t const& meetings)
@@ -44,11 +30,11 @@ void GameState::setGameState(const Human human, const Day day, State state, meet
     {
         m_stateMatrix[day - 1][human] = REQUESTABLE;
     }
-    for (auto m : meetings)
+    for (Meeting const& m : meetings)
     {
-        if (!m_meetings[day].contains(m))
+        if(!contains(m_meetings, m))
         {
-            m_meetings[day].append(m);
+            m_meetings.push_back(m);
         }
     }
 }

@@ -1,7 +1,10 @@
 #pragma once
 
-#include <QSet>
-#include <QList>
+#include <list>
+#include <set>
+#include <vector>
+#include <cstdint>
+#include <QtGlobal>
 enum State
 {
     NOT_REQUESTABLE, // 0
@@ -47,13 +50,26 @@ private:
         uint8_t m_id;
 };
 
-
-
+class Meeting
+{
+public:
+    Meeting(Day d, std::set<Human> humans);
+    Day day() const;
+    std::set<Human> humans() const;
+    bool operator==(Meeting const& other) const;
+private:
+    Day m_day;
+    std::set<Human> m_humans;
+};
 
 namespace constants
 {
     extern const std::vector<Human> HUMANS;
     extern const std::vector<Day> DAYS;
 }
-typedef QSet<Human> meeting_t;
-typedef QList<meeting_t> meetings_t;
+typedef std::list<Meeting> meetings_t;
+template<typename Container, typename KeyT>
+bool contains(Container const& c, KeyT const& key)
+{
+    return std::find(std::begin(c), std::end(c), key) != std::end(c);
+}

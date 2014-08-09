@@ -19,12 +19,10 @@ public:
     GuessResponse guess() const override;
     void tellGameResult(bool isWinner) override;
     void tellCurrentState(GameState const& gameState) override;
-    QGraphicsScene* getScene();
 private: // methods
     void populateScene();
     void updateGameScene(GameState const& gameState);
-    void requestStatus(Human human) const;
-    void drawMeeting(Day day, const GameState &gameState);
+    void drawMeeting(Meeting const& meeting);
 private: // attributes
     QGraphicsScene* m_gameScene;
     QGraphicsView* m_view;
@@ -32,7 +30,7 @@ private: // attributes
     mutable Human m_guessedHuman;
     QCheckBox* m_doFinalGuessCheckBox;
     std::vector<std::vector<HumanItem*> > m_humanItemMatrix;
-    std::list<QGraphicsItemGroup*> m_meetings;
+    meetings_t m_allKnownMeetings;
 
 };
 

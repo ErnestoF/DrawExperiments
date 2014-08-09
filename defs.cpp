@@ -27,3 +27,24 @@ std::vector<Day> calcDays()
 const std::vector<Human> constants::HUMANS = calcHumans();
 
 const std::vector<Day> constants::DAYS = calcDays();
+
+
+Meeting::Meeting(Day d, std::set<Human> humans)
+    : m_day(d)
+    , m_humans(humans)
+{}
+
+Day Meeting::day() const
+{
+    return m_day;
+}
+
+std::set<Human> Meeting::humans() const
+{
+    return m_humans;
+}
+
+bool Meeting::operator==(const Meeting &other) const
+{
+    return m_day == other.day() && m_humans == other.humans();
+}

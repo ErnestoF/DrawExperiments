@@ -1,8 +1,6 @@
-TODO NEXT
-Milestones :
 M1 : The user can play on a local pc without a rival. The server logic is located on the same pc.
-     Remaining tasks for M1 :
-     - Think whether it is possible to simplify the scene updating.
+     - Refactor GuiClient, Hide Game within Server, refactor Game, GameState etc. Write utils.
+     - Check the server logic. (does final guess works properly)
      - Update the server logic.
      - Rename client -> player, server -> game moderator.
 

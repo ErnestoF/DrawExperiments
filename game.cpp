@@ -2,39 +2,49 @@
 
 #include <chrono>
 #include <random>
+using namespace constants;
 namespace
 {
-    meeting_t generateMeeting(const size_t numHumans)
+    Meeting generateMeeting(Day d)
     {
-        meeting_t meeting;
         std::random_device rd;
         std::default_random_engine generator(rd());
-        std::uniform_int_distribution<uint8_t> distribution(0,numHumans-1);
+        std::uniform_int_distribution<uint8_t> distribution(0,NUM_HUMANS - 1 );
         std::uniform_int_distribution<uint8_t> meetingsDistribution(2,5);
-        const size_t numParticipants = meetingsDistribution(generator);
-        while(static_cast<size_t>(meeting.size()) < numParticipants)
-        {
-            meeting.insert(Human(distribution(generator)));
-        }
-        return meeting;
-    }
+        std::set<Human> participants;
 
-    Game::meetings_table_t generateMeetingsTable(const size_t numHumans, const size_t numDays)
-    {
-        Q_ASSERT(numDays > 2);
-        auto result = Game::meetings_table_t(numDays, meetings_t());
-        for (size_t d = 0; d < numDays-1; ++d )
+        const uint8_t numParticipants = meetingsDistribution(generator);
+        while(static_cast<size_t>(participants.size()) < numParticipants)
         {
-            result[d]<<generateMeeting(numHumans)<<generateMeeting(numHumans);
+            participants.insert(Human(distribution(generator)));
+        }
+        return Meeting(d, participants);
+    }
+    meetings_t generateMeetings()
+    {
+        meetings_t result;
+        for(auto d : DAYS)
+        {
+            if(d != NUM_DAYS - 1)
+            {
+                result.push_back(generateMeeting(d));
+                result.push_back(generateMeeting(d));
+            }
         }
         return result;
     }
+    meetings_t meetingsOnDay(meetings_t const& allMeetings, Day d)
+    {
+        meetings_t result;
+        std::copy_if(std::begin(allMeetings),
+                     std::end(allMeetings),
+                     std::back_inserter(result),
+                     [=](Meeting const& m) {return m.day() == d;});
+        return result;
+    }
 }
-using constants::NUM_HUMANS;
-using constants::NUM_DAYS;
 Game::Game()
   : m_contagionTable(NUM_DAYS, QVector<bool>(NUM_HUMANS, false))
-  , m_meetingsTable(generateMeetingsTable(NUM_HUMANS, NUM_DAYS))
 {
 }
 
@@ -43,22 +53,9 @@ bool Game::isInfected(const Day day, const Human human) const
    return m_contagionTable[day][human];
 }
 
-meetings_t Game::meetings(const Day day, const Human human) const
+meetings_t Game::meetings() const
 {
-    meetings_t result;
-    for(auto m : m_meetingsTable[day])
-    {
-        if (m.contains(human))
-        {
-            result.append(m);
-        }
-    }
-    return result;
-}
-
-meetings_t Game::meetings(const Day day) const
-{
-    return m_meetingsTable[day];
+    return m_meetings;
 }
 
 Game Game::generateGame()
@@ -70,7 +67,7 @@ Game Game::generateGame()
     const Human firstInfectedHuman(distribution(generator));
     Q_ASSERT(firstInfectedHuman < NUM_HUMANS);
     result.m_contagionTable[0][firstInfectedHuman] = true;
-    result.m_meetingsTable = generateMeetingsTable(NUM_HUMANS, NUM_DAYS);
+    result.m_meetings = generateMeetings();
     for(uint8_t d(0); d < NUM_DAYS - 1; ++d)
     {
         for(uint8_t h = 0; h < NUM_HUMANS; ++h)
@@ -80,18 +77,18 @@ Game Game::generateGame()
                 result.m_contagionTable[d][h] |= result.m_contagionTable[d-1][h];
             }
         }
-        for(auto m : result.m_meetingsTable[d])
+        for(auto m : meetingsOnDay(result.meetings(), Day(d)))
         {
             size_t numInfected = 0;
-            for (auto h : m)
+            for (auto h : m.humans())
             {
                 if (result.isInfected(Day(d),Human(h)))
                 {
                     ++numInfected;
                 }
             }
-            const size_t totalNumber = m.size();
-            for (auto h : m)
+            const size_t totalNumber = m.humans().size();
+            for (auto h : m.humans())
             {
                 if(!result.isInfected(Day(d),Human(h)))
                 {
