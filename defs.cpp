@@ -39,12 +39,12 @@ Day Meeting::day() const
     return m_day;
 }
 
-std::set<Human> Meeting::humans() const
+std::set<Human> Meeting::participants() const
 {
     return m_humans;
 }
 
 bool Meeting::operator==(const Meeting &other) const
 {
-    return m_day == other.day() && m_humans == other.humans();
+    return m_day == other.day() && m_humans == other.participants();
 }

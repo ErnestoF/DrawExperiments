@@ -11,7 +11,7 @@ namespace
                      std::back_inserter(result),
                      [=](Meeting const& m)
         {
-            return (m.day() == d) && contains(m.humans(), h);
+            return (m.day() == d) && contains(m.participants(), h);
         });
         return result;
     }

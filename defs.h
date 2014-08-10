@@ -16,8 +16,8 @@ enum State
 
 namespace constants
 {
-    const uint8_t NUM_DAYS = 10;
-    const uint8_t NUM_HUMANS = 10;
+    constexpr uint8_t NUM_DAYS = 10;
+    constexpr uint8_t NUM_HUMANS = 10;
 }
 class Human
 {
@@ -53,9 +53,9 @@ private:
 class Meeting
 {
 public:
-    Meeting(Day d, std::set<Human> humans);
+    Meeting(Day d, std::set<Human> participants);
     Day day() const;
-    std::set<Human> humans() const;
+    std::set<Human> participants() const;
     bool operator==(Meeting const& other) const;
 private:
     Day m_day;
@@ -73,3 +73,9 @@ bool contains(Container const& c, KeyT const& key)
 {
     return std::find(std::begin(c), std::end(c), key) != std::end(c);
 }
+template<typename Container, typename Pred>
+bool contains_if(Container const& c, Pred pred)
+{
+    return std::find_if(std::begin(c), std::end(c), pred) != std::end(c);
+}
+

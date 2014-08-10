@@ -80,15 +80,15 @@ Game Game::generateGame()
         for(auto m : meetingsOnDay(result.meetings(), Day(d)))
         {
             size_t numInfected = 0;
-            for (auto h : m.humans())
+            for (auto h : m.participants())
             {
                 if (result.isInfected(Day(d),Human(h)))
                 {
                     ++numInfected;
                 }
             }
-            const size_t totalNumber = m.humans().size();
-            for (auto h : m.humans())
+            const size_t totalNumber = m.participants().size();
+            for (auto h : m.participants())
             {
                 if(!result.isInfected(Day(d),Human(h)))
                 {
