@@ -14,7 +14,6 @@ QMAKE_CXX = clang
 QMAKE_CXXFLAGS  = -std=c++11
 
 SOURCES += \
-    game.cpp \
     gamesession.cpp \
     humanitem.cpp \
     main.cpp \
@@ -28,7 +27,6 @@ SOURCES += \
 
 HEADERS  += \
     defs.h \
-    game.h \
     gamesession.h \
     humanitem.h \
     mainwindow.h \

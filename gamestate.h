@@ -7,6 +7,10 @@
 class GameState
 {
 public:
+    /**
+     * @brief GameState The default GameState has a REQUESTABLE top line
+     * and NOT_REQUESTABLE - all other lines.
+     */
     GameState();
 
     State getHumanState(Human const human, Day const day) const;

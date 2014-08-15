@@ -1,9 +1,9 @@
 M1 : The user can play on a local pc without a rival. The server logic is located on the same pc.
-     - Refactor GuiClient, Hide Game within Server, refactor Game, GameState etc. Write utils.
-     - Check the server logic. (does final guess works properly)
-     - Update the server logic.
-     - Rename client -> player, server -> game moderator.
-
+    1) Refactor generateGame and further things in server.cpp
+    2) Refactor gameSession
+    3) Rename client -> player, server->game moderator
+    4) include and link boost.
+    5) write utils
 M2 : The user can play on a local pc without a rival. The server logic is located on the remote host.
     - The game state could be build from Google Proto Resource.
     - Define several types of messages.
