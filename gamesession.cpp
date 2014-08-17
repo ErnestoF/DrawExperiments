@@ -39,19 +39,23 @@ namespace
         return result;
     }
 }
-void GameSession::addClient(AbstractClient *client)
+void GameSession::addPlayer(AbstractClient *player)
 {
-    Q_ASSERT(0 != client);
-    m_clients.push_back(client);
+    Q_ASSERT(0 != player);
+    Q_ASSERT(!contains_if(m_players, [&](AbstractClient const* p)
+    {
+      return p->getName() == player->getName();
+    }));
+    m_players.push_back(player);
 }
 
 void GameSession::start()
 {
-    Q_ASSERT(!m_clients.empty());
+    Q_ASSERT(!m_players.empty());
     GameState gameState = m_server.generateGame();
-    std::vector<GameState> gameStates(m_clients.size(), gameState);
+    std::vector<GameState> gameStates(m_players.size(), gameState);
     size_t count = 0;
-    for ( auto & client : m_clients)
+    for ( auto & client : m_players)
     {
         client->tellCurrentState(gameState);
     }
@@ -59,7 +63,7 @@ void GameSession::start()
     while(!readyFlag)
     {
         size_t c = 0;
-        for ( auto const& client : m_clients)
+        for ( auto const& client : m_players)
         {
             auto guessResponse = client->guess();
             if(guessResponse.isFinalGuess())
@@ -71,15 +75,20 @@ void GameSession::start()
                 {
                     m_server.discoverHuman(gameStates[c], finalGuess);
                 }
-                if (gameStates[c].getHumanState(finalGuess, Day(0)) == ILL)
+                const auto statusOnTheFirstDay = gameStates[c].getHumanState(finalGuess, Day(0));
+                if ( statusOnTheFirstDay == NOT_ILL)
                 {
                     client->tellGameResult(false);
                 }
-                else
+                else if (statusOnTheFirstDay == ILL)
                 {
                     client->tellGameResult(true);
                     readyFlag = true;
                 }
+                else
+                  {
+                    Q_ASSERT(false);
+                  }
 
             }
             else
@@ -100,16 +109,16 @@ void GameSession::start()
     }
     qDebug() << "Num Steps " << count;
     QString winners;
-    for(int c = 0; c < m_clients.size(); ++c)
+    for(int c = 0; c < m_players.size(); ++c)
     {
         if(isReady(gameStates[c]))
         {
-            winners.append(m_clients[c]->getName()).append(" ");
-            m_clients[c]->tellGameResult(true);
+            winners.append(m_players[c]->getName()).append(" ");
+            m_players[c]->tellGameResult(true);
         }
         else
         {
-            m_clients[c]->tellGameResult(false);
+            m_players[c]->tellGameResult(false);
         }
     }
     qDebug() <<" The winners are " << winners;

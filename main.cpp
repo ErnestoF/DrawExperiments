@@ -20,12 +20,12 @@ int main(int argc, char *argv[])
     RandomClient client3("RandomBot3");
     RandomClient client4("RandomBot4");
     RandomClient client5("RandomBot5");
-    session.addClient(&client1);
-    session.addClient(&client2);
-    session.addClient(&client3);
-    session.addClient(&client4);
-    session.addClient(&client5);
-    session.addClient(&guiClient);
+    session.addPlayer(&client1);
+    session.addPlayer(&client2);
+    session.addPlayer(&client3);
+    session.addPlayer(&client4);
+    session.addPlayer(&client5);
+    session.addPlayer(&guiClient);
     session.start();
     return a.exec();
     //return 0;

@@ -7,15 +7,19 @@
 class GameSession
 {
 public:
-  void addClient(AbstractClient * client);
+  /**
+   * @brief addPlayer Adds a new player for the game session.
+   * @pre A player with the same name was not added before.
+   */
+  void addPlayer(AbstractClient * player);
 
   /**
    * @brief start Starts the game session
-   * @pre The number of the added clients is not zero.
+   * @pre The number of the added players is not zero.
    */
   void start();
 
 private:
-  QVector<AbstractClient *> m_clients;
+  QVector<AbstractClient *> m_players;
   Server m_server;
 };
