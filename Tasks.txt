@@ -1,5 +1,4 @@
 M1 : The user can play on a local pc without a rival. The server logic is located on the same pc.
-    1) Refactor generateGame and further things in server.cpp
     2) Refactor gameSession
     3) Rename client -> player, server->game moderator
     4) include and link boost.

@@ -12,10 +12,13 @@ public:
     Server() = default;
     GameState generateGame();
     void discoverHuman(GameState& gameState, Human const human) const;
-private:
+
+private: // Methods
+
     Server(const Server&) = delete;
     Server & operator=(const Server&) = delete;
 
+private: // Attributes
     class Game;
     std::shared_ptr<Game> m_game;
 };

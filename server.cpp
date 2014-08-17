@@ -73,6 +73,8 @@ public:
     static Game generateGame();
 private:
     void propagateStatusToTheNextDay(const Day day);
+    void prapagateInfectionFromMeeting(const Day day, Meeting const& meeting);
+    void propageteInfectionFromMeetings(const Day day);
     QVector<QVector<bool> > m_contagionTable;
     meetings_t m_meetings;
 };
@@ -86,16 +88,21 @@ GameState Server::generateGame()
 void Server::discoverHuman(GameState &gameState, const Human human) const
 {
     Q_ASSERT(m_game);
-    for(auto d: constants::DAYS)
+    for(auto day : DAYS)
     {
-        if (REQUESTABLE == gameState.getHumanState(human, d))
+        if (REQUESTABLE == gameState.getHumanState(human, day))
         {
-            gameState.setGameState(human, Day(d), m_game->isInfected(Day(d),human) ? ILL : NOT_ILL, meetingsOnDay(m_game->meetings(), d, human));
+            gameState.setGameState(human,
+                                   day,
+                                   m_game->isInfected(day,human) ? ILL : NOT_ILL,
+                                   meetingsOnDay(m_game->meetings(), day, human));
             return;
         }
     }
     Q_ASSERT(gameState.getHumanState(human,Day(0)) != NOT_REQUESTABLE);
 }
+
+
 
 Server::Game::Game()
   : m_contagionTable(NUM_DAYS, QVector<bool>(NUM_HUMANS, false))
@@ -115,34 +122,16 @@ meetings_t Server::Game::meetings() const
 Server::Game Server::Game::generateGame()
 {
     Game result;
-    std::default_random_engine generator(std::chrono::system_clock::now().time_since_epoch().count());
-    std::uniform_real_distribution<float> infectionDistribution;
     result.m_contagionTable[0][generateFirstInfectedHuman()] = true;
     result.m_meetings = generateMeetings();
-    for(uint8_t d(0); d < NUM_DAYS - 1; ++d)
+    for(auto d : DAYS )
     {
-        result.propagateStatusToTheNextDay(Day(d));
-        for(auto m : meetingsOnDay(result.meetings(), Day(d)))
+        result.propagateStatusToTheNextDay(d);
+        if ( d != NUM_DAYS - 1)
         {
-            size_t numInfected = 0;
-            for (auto h : m.participants())
-            {
-                if (result.isInfected(Day(d),Human(h)))
-                {
-                    ++numInfected;
-                }
-            }
-            const size_t totalNumber = m.participants().size();
-            for (auto h : m.participants())
-            {
-                if(!result.isInfected(Day(d),Human(h)))
-                {
-                    result.m_contagionTable[d+1][h] = infectionDistribution(generator) < (numInfected/static_cast<float>(totalNumber));
-                }
-            }
+            result.propageteInfectionFromMeetings(d);
         }
     }
-    result.propagateStatusToTheNextDay(Day(NUM_DAYS-1));
     return result;
 
 }
@@ -155,5 +144,32 @@ void Server::Game::propagateStatusToTheNextDay(const Day day)
         {
             m_contagionTable[day][h] |= m_contagionTable[day-1][h];
         }
+    }
+}
+
+void Server::Game::prapagateInfectionFromMeeting(const Day day, const Meeting &meeting)
+{
+    std::default_random_engine generator(std::chrono::system_clock::now().time_since_epoch().count());
+    std::uniform_real_distribution<float> infectionDistribution;
+    auto const& participants = meeting.participants();
+    size_t numInfected = std::count_if(std::begin(participants),
+                                       std::end(participants),
+                                       [&](Human h)
+    {
+            return isInfected(day, h);
+    }) ;
+
+    const size_t totalNumber = participants.size();
+    for (auto h : participants)
+    {
+       m_contagionTable[day+1][h] |= infectionDistribution(generator) < (numInfected/static_cast<float>(totalNumber));
+    }
+}
+
+void Server::Game::propageteInfectionFromMeetings(const Day day)
+{
+    for(auto const& m : meetingsOnDay(meetings(), day))
+    {
+        prapagateInfectionFromMeeting(day,m);
     }
 }
