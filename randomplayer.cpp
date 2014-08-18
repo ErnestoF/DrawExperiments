@@ -1,13 +1,13 @@
-#include "randomclient.h"
+#include "randomplayer.h"
 #include "gamestate.h"
 #include "guessresponse.h"
-RandomClient::RandomClient(const QString &name)
-    : AbstractClient(name)
+RandomPlayer::RandomPlayer(const QString &name)
+    : AbstractPlayer(name)
     , m_currentState()
 {
 }
 
-GuessResponse RandomClient::guess() const
+GuessResponse RandomPlayer::guess() const
 {
     std::set<Human> result;
     for(auto h : constants::HUMANS)
@@ -20,7 +20,7 @@ GuessResponse RandomClient::guess() const
     return GuessResponse::makeRegularGuess(result);
 }
 
-void RandomClient::tellCurrentState(const GameState &gameState)
+void RandomPlayer::tellCurrentState(const GameState &gameState)
 {
     m_currentState = gameState;
 }

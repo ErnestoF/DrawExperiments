@@ -1,21 +1,19 @@
-#ifndef GUICLIENT_H
-#define GUICLIENT_H
+#pragma once
 
 #include "defs.h"
-#include "abstractclient.h"
+#include "abstractplayer.h"
 #include <QGenericMatrix>
 #include <QGraphicsScene>
-#include <list>
 
 class HumanItem;
 class QCheckBox;
 class QGraphicsView;
 class QGraphicsItemGroup;
 
-class GuiClient : public AbstractClient
+class GuiPlayer : public AbstractPlayer
 {
 public:
-    GuiClient(QString const& name);
+    GuiPlayer(QString const& name);
     GuessResponse guess() const override;
     void tellGameResult(bool isWinner) override;
     void tellCurrentState(GameState const& gameState) override;
@@ -32,5 +30,3 @@ private: // attributes
     meetings_t m_meetings;
 
 };
-
-#endif // GUICLIENT_H

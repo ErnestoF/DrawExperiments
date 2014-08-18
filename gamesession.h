@@ -1,6 +1,6 @@
 #pragma once
 
-#include "abstractclient.h"
+#include "abstractplayer.h"
 #include "server.h"
 #include <QVector>
 
@@ -12,7 +12,7 @@ public:
    * @note The ownership of the pointer will not be shared.
    * @pre A player with the same name was not added before.
    */
-  void addPlayer(AbstractClient * player);
+  void addPlayer(AbstractPlayer * player);
 
   /**
    * @brief start Starts the game session
@@ -21,6 +21,6 @@ public:
   void start();
 
 private:
-  QVector<AbstractClient *> m_players;
+  QVector<AbstractPlayer *> m_players;
   Server m_server;
 };

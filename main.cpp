@@ -1,7 +1,7 @@
 #include "gamesession.h"
-#include "guiclient.h"
+#include "guiplayer.h"
 #include "mainwindow.h"
-#include "randomclient.h"
+#include "randomplayer.h"
 #include <QApplication>
 #include <QDebug>
 
@@ -12,14 +12,14 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
 
-    GuiClient guiClient("GuiClient");
+    GuiPlayer guiClient("GuiClient");
 
     GameSession session;
-    RandomClient client1("RandomBot1");
-    RandomClient client2("RandomBot2");
-    RandomClient client3("RandomBot3");
-    RandomClient client4("RandomBot4");
-    RandomClient client5("RandomBot5");
+    RandomPlayer client1("RandomBot1");
+    RandomPlayer client2("RandomBot2");
+    RandomPlayer client3("RandomBot3");
+    RandomPlayer client4("RandomBot4");
+    RandomPlayer client5("RandomBot5");
     session.addPlayer(&client1);
     session.addPlayer(&client2);
     session.addPlayer(&client3);

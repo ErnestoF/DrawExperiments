@@ -1,4 +1,4 @@
-#include "guiclient.h"
+#include "guiplayer.h"
 
 #include "gamestate.h"
 #include "guessresponse.h"
@@ -33,8 +33,8 @@ namespace
 
 }
 
-GuiClient::GuiClient(QString const& name)
-    : AbstractClient(name)
+GuiPlayer::GuiPlayer(QString const& name)
+    : AbstractPlayer(name)
     , m_view(new QGraphicsView(&m_gameScene))
     , m_editMode(false)
     , m_guessedHuman(0)
@@ -44,7 +44,7 @@ GuiClient::GuiClient(QString const& name)
     populateScene();
 }
 
-GuessResponse GuiClient::guess() const
+GuessResponse GuiPlayer::guess() const
 {
     m_editMode = true;
     while(m_editMode)
@@ -61,7 +61,7 @@ GuessResponse GuiClient::guess() const
     }
 }
 
-void GuiClient::tellGameResult(bool isWinner)
+void GuiPlayer::tellGameResult(bool isWinner)
 {
     if(isWinner)
     {
@@ -73,7 +73,7 @@ void GuiClient::tellGameResult(bool isWinner)
     }
 }
 
-void GuiClient::tellCurrentState(const GameState &gameState)
+void GuiPlayer::tellCurrentState(const GameState &gameState)
 {
     for(auto d  : constants::DAYS)
     {
@@ -92,7 +92,7 @@ void GuiClient::tellCurrentState(const GameState &gameState)
     }
 }
 
-void GuiClient::populateScene()
+void GuiPlayer::populateScene()
 {
     for(auto d : constants::DAYS)
         for(auto h : constants::HUMANS)
@@ -130,7 +130,7 @@ namespace
     }
 
 }
-void GuiClient::drawMeeting(const Meeting &meeting)
+void GuiPlayer::drawMeeting(const Meeting &meeting)
 {
     bool drawAbove = contains_if(m_meetings, [&](const Meeting& oldMeeting){ return meeting.day() == oldMeeting.day(); });
     auto day = meeting.day();

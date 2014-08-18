@@ -1,15 +1,14 @@
-#ifndef ABSTRACTCLIENT_H
-#define ABSTRACTCLIENT_H
+#pragma once
 
 #include "defs.h"
 #include <set>
 #include <QString>
 class GameState;
 class GuessResponse;
-class AbstractClient
+class AbstractPlayer
 {
 public:
-   AbstractClient(QString const& name)
+   AbstractPlayer(QString const& name)
        : m_name(name)
    {}
    virtual GuessResponse guess() const = 0;
@@ -25,5 +24,3 @@ public:
 private:
    QString m_name;
 };
-
-#endif // ABSTRACTCLIENT_H

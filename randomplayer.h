@@ -1,12 +1,11 @@
-#ifndef RANDOMCLIENT_H
-#define RANDOMCLIENT_H
+#pragma once
 
-#include "abstractclient.h"
+#include "abstractplayer.h"
 #include "gamestate.h"
-class RandomClient : public AbstractClient
+class RandomPlayer : public AbstractPlayer
 {
 public:
-    RandomClient(QString const& name);
+    RandomPlayer(QString const& name);
     GuessResponse guess() const override;
     void tellCurrentState(GameState const& gameState) override;
 
@@ -14,4 +13,3 @@ private:
     GameState m_currentState;
 };
 
-#endif // RANDOMCLIENT_H

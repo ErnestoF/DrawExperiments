@@ -20,10 +20,10 @@ SOURCES += \
     mainwindow.cpp \
     server.cpp \
     gamestate.cpp \
-    randomclient.cpp \
-    guiclient.cpp \
     guessresponse.cpp \
-    defs.cpp
+    defs.cpp \
+    guiplayer.cpp \
+    randomplayer.cpp
 
 HEADERS  += \
     defs.h \
@@ -32,10 +32,10 @@ HEADERS  += \
     mainwindow.h \
     server.h \
     gamestate.h \
-    abstractclient.h \
-    randomclient.h \
-    guiclient.h \
-    guessresponse.h
+    guessresponse.h \
+    abstractplayer.h \
+    guiplayer.h \
+    randomplayer.h
 
 
 OTHER_FILES += \

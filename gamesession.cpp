@@ -28,11 +28,11 @@ IteratorT pickRandom(IteratorT from, IteratorT to)
     return from;
 }
 
-void tellGameResults( QVector<AbstractClient*> const& allPlayers,
-                      QVector<AbstractClient*> const& winners)
+void tellGameResults( QVector<AbstractPlayer*> const& allPlayers,
+                      QVector<AbstractPlayer*> const& winners)
 {
     QString winnersStr;
-    for(AbstractClient* p : allPlayers)
+    for(AbstractPlayer* p : allPlayers)
     {
         if(contains(winners, p))
         {
@@ -48,13 +48,13 @@ void tellGameResults( QVector<AbstractClient*> const& allPlayers,
 }
 struct SingleGame
 {
-    SingleGame(QVector<AbstractClient*> players, Server& server);
-    typedef QVector<std::pair<AbstractClient*, GameState> > PlayerStates;
+    SingleGame(QVector<AbstractPlayer*> players, Server& server);
+    typedef QVector<std::pair<AbstractPlayer*, GameState> > PlayerStates;
     PlayerStates m_playerStates;
     Server& m_server;
     uint16_t m_numRounds;
-    QVector<AbstractClient*> m_winners;
-    QVector<AbstractClient*> m_loosers;
+    QVector<AbstractPlayer*> m_winners;
+    QVector<AbstractPlayer*> m_loosers;
 private:
     void start();
     bool askPlayer(PlayerStates::reference playerState);
@@ -62,12 +62,12 @@ private:
 
 };
 }
-void GameSession::addPlayer(AbstractClient *player)
+void GameSession::addPlayer(AbstractPlayer *player)
 {
     Q_ASSERT(0 != player);
     Q_ASSERT(!contains_if(
                  m_players,
-                 [&](AbstractClient const* p){return p->getName() == player->getName();}));
+                 [&](AbstractPlayer const* p){return p->getName() == player->getName();}));
     m_players.push_back(player);
 }
 
@@ -80,11 +80,11 @@ void GameSession::start()
 }
 
 
-SingleGame::SingleGame(QVector<AbstractClient *> players, Server &server)
+SingleGame::SingleGame(QVector<AbstractPlayer *> players, Server &server)
     : m_server(server)
     , m_numRounds(0)
 {
-    for(AbstractClient* p : players)
+    for(AbstractPlayer* p : players)
     {
         GameState initialState;
         m_playerStates.push_back(std::make_pair(p, initialState));
@@ -109,7 +109,7 @@ void SingleGame::start()
 
 bool SingleGame::askPlayer(PlayerStates::reference playerState)
 {
-    AbstractClient* player = playerState.first;
+    AbstractPlayer* player = playerState.first;
     GameState& state = playerState.second;
     if(contains(m_loosers, player))
     {

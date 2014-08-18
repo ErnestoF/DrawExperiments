@@ -1,9 +1,4 @@
 M1 : The user can play on a local pc without a rival. The server logic is located on the same pc.
-    2) Refactor gameSession.start() :
-        - add tellGameResults in SingleSession
-        - Use SingleSession in GameSession
-        - Refactor SingleSession
-        - Test it.
     3) Rename client -> player, server->game moderator
     4) include and link boost.
     5) write utils
