@@ -1,4 +1,4 @@
-#include "server.h"
+#include "moderator.h"
 #include "gamestate.h"
 
 #include <QVector>
@@ -63,7 +63,7 @@ namespace
     }
 }
 
-class Server::Game
+class Moderator::Game
 {
 public:
     Game();
@@ -79,13 +79,13 @@ private:
     meetings_t m_meetings;
 };
 
-GameState Server::generateGame()
+GameState Moderator::generateGame()
 {
     m_game.reset(new Game(Game::generateGame()));
     return GameState();
 }
 
-void Server::discoverHuman(GameState &gameState, const Human human) const
+void Moderator::discoverHuman(GameState &gameState, const Human human) const
 {
     Q_ASSERT(m_game);
     for(auto day : DAYS)
@@ -104,22 +104,22 @@ void Server::discoverHuman(GameState &gameState, const Human human) const
 
 
 
-Server::Game::Game()
+Moderator::Game::Game()
   : m_contagionTable(NUM_DAYS, QVector<bool>(NUM_HUMANS, false))
 {
 }
 
-bool Server::Game::isInfected(const Day day, const Human human) const
+bool Moderator::Game::isInfected(const Day day, const Human human) const
 {
    return m_contagionTable[day][human];
 }
 
-meetings_t Server::Game::meetings() const
+meetings_t Moderator::Game::meetings() const
 {
     return m_meetings;
 }
 
-Server::Game Server::Game::generateGame()
+Moderator::Game Moderator::Game::generateGame()
 {
     Game result;
     result.m_contagionTable[0][generateFirstInfectedHuman()] = true;
@@ -136,7 +136,7 @@ Server::Game Server::Game::generateGame()
 
 }
 
-void Server::Game::propagateStatusToTheNextDay(const Day day)
+void Moderator::Game::propagateStatusToTheNextDay(const Day day)
 {
     for(auto h : HUMANS)
     {
@@ -147,7 +147,7 @@ void Server::Game::propagateStatusToTheNextDay(const Day day)
     }
 }
 
-void Server::Game::prapagateInfectionFromMeeting(const Day day, const Meeting &meeting)
+void Moderator::Game::prapagateInfectionFromMeeting(const Day day, const Meeting &meeting)
 {
     std::default_random_engine generator(std::chrono::system_clock::now().time_since_epoch().count());
     std::uniform_real_distribution<float> infectionDistribution;
@@ -166,7 +166,7 @@ void Server::Game::prapagateInfectionFromMeeting(const Day day, const Meeting &m
     }
 }
 
-void Server::Game::propageteInfectionFromMeetings(const Day day)
+void Moderator::Game::propageteInfectionFromMeetings(const Day day)
 {
     for(auto const& m : meetingsOnDay(meetings(), day))
     {

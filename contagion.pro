@@ -18,24 +18,24 @@ SOURCES += \
     humanitem.cpp \
     main.cpp \
     mainwindow.cpp \
-    server.cpp \
     gamestate.cpp \
     guessresponse.cpp \
     defs.cpp \
     guiplayer.cpp \
-    randomplayer.cpp
+    randomplayer.cpp \
+    moderator.cpp
 
 HEADERS  += \
     defs.h \
     gamesession.h \
     humanitem.h \
     mainwindow.h \
-    server.h \
     gamestate.h \
     guessresponse.h \
     abstractplayer.h \
     guiplayer.h \
-    randomplayer.h
+    randomplayer.h \
+    moderator.h
 
 
 OTHER_FILES += \

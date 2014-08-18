@@ -48,10 +48,10 @@ void tellGameResults( QVector<AbstractPlayer*> const& allPlayers,
 }
 struct SingleGame
 {
-    SingleGame(QVector<AbstractPlayer*> players, Server& server);
+    SingleGame(QVector<AbstractPlayer*> players, Moderator& server);
     typedef QVector<std::pair<AbstractPlayer*, GameState> > PlayerStates;
     PlayerStates m_playerStates;
-    Server& m_server;
+    Moderator& m_server;
     uint16_t m_numRounds;
     QVector<AbstractPlayer*> m_winners;
     QVector<AbstractPlayer*> m_loosers;
@@ -80,7 +80,7 @@ void GameSession::start()
 }
 
 
-SingleGame::SingleGame(QVector<AbstractPlayer *> players, Server &server)
+SingleGame::SingleGame(QVector<AbstractPlayer *> players, Moderator &server)
     : m_server(server)
     , m_numRounds(0)
 {

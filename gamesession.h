@@ -1,7 +1,7 @@
 #pragma once
 
 #include "abstractplayer.h"
-#include "server.h"
+#include "moderator.h"
 #include <QVector>
 
 class GameSession
@@ -22,5 +22,5 @@ public:
 
 private:
   QVector<AbstractPlayer *> m_players;
-  Server m_server;
+  Moderator m_server;
 };
