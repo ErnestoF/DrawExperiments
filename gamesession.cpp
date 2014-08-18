@@ -38,6 +38,16 @@ namespace
         }
         return result;
     }
+    struct SingleGame
+    {
+      SingleGame(QVector<AbstractClient*> players, Server& server);
+      void start();
+
+      QVector<std::pair<AbstractClient*, GameState> > m_playerStates;
+      Server& m_server;
+      uint16_t m_numRounds;
+      QVector<AbstractClient*> m_winners;
+    };
 }
 void GameSession::addPlayer(AbstractClient *player)
 {
@@ -122,4 +132,69 @@ void GameSession::start()
         }
     }
     qDebug() <<" The winners are " << winners;
+}
+
+
+SingleGame::SingleGame(QVector<AbstractClient *> players, Server &server)
+  : m_server(server)
+  , m_numRounds(0)
+{
+  for(auto p : players)
+  {
+    m_playerStates.push_back(std::make_pair(p, GameState()));
+    }
+}
+
+void SingleGame::start()
+{
+  bool readyFlag = false;
+  std::list<AbstractClient*> loosers;
+  while(!readyFlag)
+  {
+      for ( auto& psIter : m_playerStates)
+      {
+          AbstractClient* player = psIter.first;
+          if(contains(loosers, player))
+          {
+              continue;
+          }
+          GameState& state = psIter.second;
+          auto const& guessResponse = player->guess();
+          if(guessResponse.isFinalGuess())
+          {
+              auto finalGuess = guessResponse.getFinalGuess();
+
+              while(state.getHumanState(finalGuess, Day(0)) != ILL &&
+                    state.getHumanState(finalGuess, Day(0)) != NOT_ILL)
+              {
+                  m_server.discoverHuman(state, finalGuess);
+              }
+              const auto statusOnTheFirstDay = state.getHumanState(finalGuess, Day(0));
+              Q_ASSERT(statusOnTheFirstDay == NOT_ILL || statusOnTheFirstDay == ILL);
+              if (statusOnTheFirstDay == ILL)
+              {
+                  readyFlag = true;
+                  m_winners.push_back(player);
+              }
+              else
+              {
+                loosers.push_back(player);
+              }
+          }
+          else
+          {
+              auto guessedHumans = guessResponse.getRegularGuess();
+              Q_ASSERT(!guessedHumans.empty());
+              auto nextGuess = *(pickRandom(guessedHumans.begin(), guessedHumans.end()));
+              m_server.discoverHuman(state, nextGuess);
+              player->tellCurrentState(state);
+              if (isReady(state))
+              {
+                  readyFlag = true;
+                  m_winners.push_back(player);
+              }
+          }
+      }
+  }
+  // todo tell result to winners
 }
