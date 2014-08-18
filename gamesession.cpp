@@ -49,12 +49,15 @@ void tellGameResults( QVector<AbstractClient*> const& allPlayers,
 struct SingleGame
 {
     SingleGame(QVector<AbstractClient*> players, Server& server);
-    QVector<std::pair<AbstractClient*, GameState> > m_playerStates;
+    typedef QVector<std::pair<AbstractClient*, GameState> > PlayerStates;
+    PlayerStates m_playerStates;
     Server& m_server;
     uint16_t m_numRounds;
     QVector<AbstractClient*> m_winners;
+    QVector<AbstractClient*> m_loosers;
 private:
     void start();
+    bool askPlayer(PlayerStates::reference playerState);
     State discoverTillFirstDay(GameState& gameState, Human h);
 
 };
@@ -62,10 +65,9 @@ private:
 void GameSession::addPlayer(AbstractClient *player)
 {
     Q_ASSERT(0 != player);
-    Q_ASSERT(!contains_if(m_players, [&](AbstractClient const* p)
-    {
-                 return p->getName() == player->getName();
-             }));
+    Q_ASSERT(!contains_if(
+                 m_players,
+                 [&](AbstractClient const* p){return p->getName() == player->getName();}));
     m_players.push_back(player);
 }
 
@@ -95,50 +97,55 @@ void SingleGame::start()
 {
     m_server.generateGame();
     bool readyFlag = false;
-    std::list<AbstractClient*> loosers;
     while(!readyFlag)
     {
         ++m_numRounds;
-        for ( auto& psIter : m_playerStates)
+        for ( auto& it : m_playerStates)
         {
-            AbstractClient* player = psIter.first;
-            if(contains(loosers, player))
-            {
-                continue;
-            }
-            GameState& state = psIter.second;
-            auto const& guessResponse = player->guess();
-            if(guessResponse.isFinalGuess())
-            {
-                auto finalGuess = guessResponse.getFinalGuess();
-                const auto statusOnTheFirstDay = discoverTillFirstDay(state, finalGuess);
-                Q_ASSERT(statusOnTheFirstDay == NOT_ILL || statusOnTheFirstDay == ILL);
-                if (statusOnTheFirstDay == ILL)
-                {
-                    readyFlag = true;
-                    m_winners.push_back(player);
-                }
-                else
-                {
-                    loosers.push_back(player);
-                }
-            }
-            else
-            {
-                auto guessedHumans = guessResponse.getRegularGuess();
-                Q_ASSERT(!guessedHumans.empty());
-                auto nextGuess = *(pickRandom(guessedHumans.begin(), guessedHumans.end()));
-                m_server.discoverHuman(state, nextGuess);
-                player->tellCurrentState(state);
-                if (isReady(state))
-                {
-                    readyFlag = true;
-                    m_winners.push_back(player);
-                }
-            }
+            readyFlag |= askPlayer(it);
         }
     }
-    // todo tell result to winners
+}
+
+bool SingleGame::askPlayer(PlayerStates::reference playerState)
+{
+    AbstractClient* player = playerState.first;
+    GameState& state = playerState.second;
+    if(contains(m_loosers, player))
+    {
+        return false;
+    }
+    auto const& guessResponse = player->guess();
+    if(guessResponse.isFinalGuess())
+    {
+        auto finalGuess = guessResponse.getFinalGuess();
+        const auto statusOnTheFirstDay = discoverTillFirstDay(state, finalGuess);
+        Q_ASSERT(statusOnTheFirstDay == NOT_ILL || statusOnTheFirstDay == ILL);
+        if (statusOnTheFirstDay == ILL)
+        {
+            m_winners.push_back(player);
+            return true;
+        }
+        else
+        {
+            m_loosers.push_back(player);
+            return false;
+        }
+    }
+    else
+    {
+        auto guessedHumans = guessResponse.getRegularGuess();
+        Q_ASSERT(!guessedHumans.empty());
+        auto nextGuess = *(pickRandom(guessedHumans.begin(), guessedHumans.end()));
+        m_server.discoverHuman(state, nextGuess);
+        player->tellCurrentState(state);
+        if (isReady(state))
+        {
+            m_winners.push_back(player);
+            return true;
+        }
+        return false;
+    }
 }
 
 State SingleGame::discoverTillFirstDay(GameState &gameState, Human h)
