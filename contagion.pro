@@ -12,7 +12,6 @@ TARGET = contagion
 TEMPLATE = app
 QMAKE_CXX = clang
 QMAKE_CXXFLAGS  = -std=c++11
-
 SOURCES += \
     gamesession.cpp \
     humanitem.cpp \
@@ -39,6 +38,7 @@ HEADERS  += \
 
 
 OTHER_FILES += \
-    Tasks.txt
+    Tasks.txt \
+    CMakeLists.txt
 
 

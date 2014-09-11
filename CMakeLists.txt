@@ -6,29 +6,30 @@ project(Contagion)
 set (CMAKE_CXX_COMPILER clang)
 ADD_DEFINITIONS(-std=c++11) 
 set(CMAKE_PREFIX_PATH $ENV{QTDIR})
-# Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-# Instruct CMake to run moc automatically when needed.
 set(CMAKE_AUTOMOC ON)
 
-# Find the QtWidgets library
+# Find dependencies
 find_package(Qt5Widgets)
+find_package(Boost )
+message(${Boost_INCLUDE_DIRS})
+
 
 # Define SOURCES 
 set(CONTAGION_SOURCES 
- gamesession.cpp 
- humanitem.cpp 
- main.cpp 
- mainwindow.cpp 
- server.cpp 
- gamestate.cpp 
- randomclient.cpp 
- guiclient.cpp 
- guessresponse.cpp 
- defs.cpp)
+defs.cpp
+gamesession.cpp
+gamestate.cpp
+guessresponse.cpp
+guiplayer.cpp
+humanitem.cpp
+main.cpp
+mainwindow.cpp
+moderator.cpp
+randomplayer.cpp)
 
 # Tell CMake to create the helloworld executable
 add_executable(contagion  ${CONTAGION_SOURCES})
 
-# Use the Widgets module from Qt 5.
-target_link_libraries(contagion Qt5::Widgets)
+# Link.
+target_link_libraries(contagion Qt5::Widgets -lstdc++ -lm)

@@ -1,5 +1,4 @@
 M1 : The user can play on a local pc without a rival. The server logic is located on the same pc.
-    3) Rename client -> player, server->game moderator
     4) include and link boost.
     5) write utils
 M2 : The user can play on a local pc without a rival. The server logic is located on the remote host.
