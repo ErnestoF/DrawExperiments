@@ -1,7 +1,10 @@
+#include <boost/python.hpp>
+#undef B0
 #include "gamesession.h"
 #include "guiplayer.h"
 #include "mainwindow.h"
 #include "randomplayer.h"
+
 #include <QApplication>
 #include <QDebug>
 
@@ -9,7 +12,7 @@ int main(int argc, char *argv[])
 {
     Q_UNUSED(argc);
     Q_UNUSED(argv);
-
+    Py_Initialize();
     QApplication a(argc, argv);
 
     GuiPlayer guiClient("GuiClient");
