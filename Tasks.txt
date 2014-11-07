@@ -1,14 +1,2 @@
-M1 : The user can play on a local pc without a rival. The server logic is located on the same pc.
-    4) include and link boost.
-    5) write utils
-M2 : The user can play on a local pc without a rival. The server logic is located on the remote host.
-    - The game state could be build from Google Proto Resource.
-    - Define several types of messages.
-M3 : The user can play on an Android phone without a rival. The server logic is located on the remote host.
-
-M4 : The user can play against a bot.
-
-
-
-M_n : The user can play on an Android/iPhone against another users and bots. The user can write and upload its
-        own bots which play against another users and bots. The bots and users can play for money.
+- All Meetings are known at startup.
+- Make the gui client restartable (clean it in tell game result )

@@ -7,6 +7,7 @@
 #include <QGraphicsView>
 #include <QDebug>
 #include <QCheckBox>
+#include <QMessageBox>
 using namespace constants;
 namespace
 {
@@ -65,11 +66,11 @@ void GuiPlayer::tellGameResult(bool isWinner)
 {
     if(isWinner)
     {
-        m_gameScene.addText("CONGRATULATIONS, YOU ARE THE WINNER");
+        QMessageBox::information(m_view, "Result", "CONGRATULATIONS, YOU ARE THE WINNER");
     }
     else
     {
-        m_gameScene.addText("HAHAHA, LOOOSER");
+        QMessageBox::information(m_view, "Result", "YOU LOOSE");
     }
 }
 
