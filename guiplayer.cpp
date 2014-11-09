@@ -76,6 +76,7 @@ void GuiPlayer::tellGameResult(bool isWinner)
 
 void GuiPlayer::tellCurrentState(const GameState &gameState)
 {
+
     for(auto d  : constants::DAYS)
     {
         for(auto h : constants::HUMANS)

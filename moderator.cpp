@@ -83,7 +83,9 @@ private:
 GameState Moderator::generateGame()
 {
     m_game.reset(new Game(Game::generateGame()));
-    return GameState();
+    GameState defaultState;
+    defaultState.setMeetings(m_game->meetings());
+    return std::move(defaultState);
 }
 
 void Moderator::discoverHuman(GameState &gameState, const Human human) const
@@ -93,10 +95,7 @@ void Moderator::discoverHuman(GameState &gameState, const Human human) const
     {
         if (REQUESTABLE == gameState.getHumanState(human, day))
         {
-            gameState.setGameState(human,
-                                   day,
-                                   m_game->isInfected(day,human) ? ILL : NOT_ILL,
-                                   meetingsOnDay(m_game->meetings(), day, human));
+            gameState.setHumanState(human, day, m_game->isInfected(day, human) ? ILL : NOT_ILL);
             return;
         }
     }

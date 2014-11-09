@@ -11,7 +11,12 @@ GameState::GameState()
 
 State GameState::getHumanState(const Human human, const Day day) const
 {
-    return m_stateMatrix[day][human];
+  return m_stateMatrix[day][human];
+}
+
+void GameState::setMeetings(const meetings_t &meetings)
+{
+  m_meetings = meetings;
 }
 
 meetings_t GameState::getMeetings() const
@@ -37,4 +42,17 @@ void GameState::setGameState(const Human human, const Day day, State state, meet
             m_meetings.push_back(m);
         }
     }
+}
+
+
+void GameState::setHumanState(const Human human, const Day day, const State state)
+{
+  Q_ASSERT(isOneOf(state, ILL, NOT_ILL));
+  Q_ASSERT(REQUESTABLE == getHumanState(human, day));
+  m_stateMatrix[day][human] = state;
+  if(day > 0)
+  {
+      m_stateMatrix[day - 1][human] = REQUESTABLE;
+  }
+
 }

@@ -1,5 +1,6 @@
 #include "gamesession.h"
 
+#include "defs.h"
 #include "gamestate.h"
 #include "guessresponse.h"
 #include <random>
@@ -85,9 +86,10 @@ SingleGame::SingleGame(QVector<AbstractPlayer *> players, Moderator &server)
     : m_server(server)
     , m_numRounds(0)
 {
+    auto gameState = server.generateGame();
     for(AbstractPlayer* p : players)
     {
-        GameState initialState;
+        GameState initialState = gameState;
         m_playerStates.push_back(std::make_pair(p, initialState));
         p->tellCurrentState(initialState);
     }
@@ -96,7 +98,6 @@ SingleGame::SingleGame(QVector<AbstractPlayer *> players, Moderator &server)
 
 void SingleGame::start()
 {
-    m_server.generateGame();
     bool readyFlag = false;
     while(!readyFlag)
     {
