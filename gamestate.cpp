@@ -1,5 +1,6 @@
 #include "gamestate.h"
 
+#include "utils.h"
 #include <QString>
 
 using namespace constants;

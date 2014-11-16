@@ -3,6 +3,8 @@
 #include "defs.h"
 #include "gamestate.h"
 #include "guessresponse.h"
+#include "utils.h"
+
 #include <random>
 #include <QDebug>
 #include <QString>

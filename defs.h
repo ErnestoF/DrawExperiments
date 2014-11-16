@@ -64,41 +64,7 @@ private:
 
 namespace constants
 {
-    extern const std::vector<Human> HUMANS;
-    extern const std::vector<Day> DAYS;
+    extern const std::array<Human, NUM_HUMANS> HUMANS;
+    extern const std::array<Day, NUM_DAYS> DAYS;
 }
 typedef std::list<Meeting> meetings_t;
-template<typename Container, typename KeyT>
-bool contains(Container const& c, KeyT const& key)
-{
-    return std::find(std::begin(c), std::end(c), key) != std::end(c);
-}
-template<typename Container, typename Pred>
-bool contains_if(Container const& c, Pred pred)
-{
-    return std::find_if(std::begin(c), std::end(c), pred) != std::end(c);
-}
-
-template<typename T, typename Head, typename... Args>
-struct IsOneOfImpl
-{
-  static bool check(T&& t, Head&& h, Args&&... args)
-  {
-    return (std::forward<T>(t) == std::forward<Head>(h)) || IsOneOfImpl<T, Args...>::check(std::forward<T>(t), std::forward<Args>(args)...);
-  }
-};
-template<typename T, typename Last>
-struct IsOneOfImpl<T, Last>
-{
-  static bool check(T&& t, Last&& l)
-  {
-    return (std::forward<T>(t) == std::forward<Last>(l));
-  }
-};
-template<typename T, typename Head, typename... Args>
-bool isOneOf(T&& t, Head&& h,  Args&&... args)
-{
-  return IsOneOfImpl<T, Head, Args...>::check(std::forward<T>(t),
-                                              std::forward<Head>(h),
-                                              std::forward<Args>(args)...);
-}

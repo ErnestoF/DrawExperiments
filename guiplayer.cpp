@@ -3,6 +3,8 @@
 #include "gamestate.h"
 #include "guessresponse.h"
 #include "humanitem.h"
+#include "utils.h"
+
 #include <QCoreApplication>
 #include <QGraphicsView>
 #include <QDebug>

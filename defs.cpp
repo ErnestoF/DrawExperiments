@@ -1,32 +1,11 @@
 #include "defs.h"
+#include "utils.h"
 
-namespace
-{
-std::vector<Human> calcHumans()
-{
-    std::vector<Human> result;
-    for(uint8_t id = 0; id < constants::NUM_HUMANS; ++id)
-    {
-        result.push_back(Human(id));
-    }
-    return result;
-}
+using namespace constants;
 
-std::vector<Day> calcDays()
-{
-    std::vector<Day> result;
-    for(uint8_t id = 0; id < constants::NUM_DAYS; ++id)
-    {
-        result.push_back(Day(id));
-    }
-    return result;
-}
+const std::array<Human, NUM_HUMANS> constants::HUMANS = createArray<Human, NUM_HUMANS>();
 
-}
-
-const std::vector<Human> constants::HUMANS = calcHumans();
-
-const std::vector<Day> constants::DAYS = calcDays();
+const std::array<Day, NUM_DAYS> constants::DAYS = createArray<Day, NUM_DAYS>();
 
 
 Meeting::Meeting(Day d, std::set<Human> humans)

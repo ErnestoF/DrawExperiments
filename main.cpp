@@ -4,6 +4,7 @@
 #include "guiplayer.h"
 #include "mainwindow.h"
 #include "randomplayer.h"
+#include "utils.h"
 
 #include <QApplication>
 #include <QDebug>
@@ -12,7 +13,7 @@ int main(int argc, char *argv[])
 {
     Q_UNUSED(argc);
     Q_UNUSED(argv);
-    Py_Initialize();
+      Py_Initialize();
     QApplication a(argc, argv);
 
     GameSession session;

@@ -6,6 +6,7 @@
 #include <QGenericMatrix>
 #include <QGraphicsScene>
 
+#include <array>
 #include <functional>
 
 class HumanItem;
@@ -31,7 +32,8 @@ private: // attributes
     mutable bool m_editMode;
     mutable Human m_guessedHuman;
     QCheckBox* m_doFinalGuessCheckBox;
-    QGenericMatrix<constants::NUM_DAYS, constants::NUM_HUMANS, HumanItem*> m_humanItemMatrix;
+    QGenericMatrix<std::tuple_size<decltype(constants::DAYS)>::value,
+                   std::tuple_size<decltype(constants::HUMANS)>::value, HumanItem*> m_humanItemMatrix;
     meetings_t m_meetings;
     std::function<void()> m_restartCallback;
 };
