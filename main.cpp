@@ -15,9 +15,9 @@ int main(int argc, char *argv[])
     Py_Initialize();
     QApplication a(argc, argv);
 
-    GuiPlayer guiClient("GuiClient");
-
     GameSession session;
+    GuiPlayer guiClient("GuiClient", [&session](){session.start();});
+
     RandomPlayer client1("RandomBot1");
     RandomPlayer client2("RandomBot2");
     RandomPlayer client3("RandomBot3");

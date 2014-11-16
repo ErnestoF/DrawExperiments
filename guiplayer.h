@@ -2,8 +2,11 @@
 
 #include "defs.h"
 #include "abstractplayer.h"
+
 #include <QGenericMatrix>
 #include <QGraphicsScene>
+
+#include <functional>
 
 class HumanItem;
 class QCheckBox;
@@ -13,13 +16,15 @@ class QGraphicsItemGroup;
 class GuiPlayer : public AbstractPlayer
 {
 public:
-    GuiPlayer(QString const& name);
+    GuiPlayer(QString const& name,
+              std::function<void()> restartCallback = 0);
     GuessResponse guess() const override;
     void tellGameResult(bool isWinner) override;
     void tellCurrentState(GameState const& gameState) override;
 private: // methods
     void populateScene();
     void drawMeeting(Meeting const& meeting);
+    void resetPlayer();
 private: // attributes
     QGraphicsScene m_gameScene;
     QGraphicsView* m_view;
@@ -28,5 +33,5 @@ private: // attributes
     QCheckBox* m_doFinalGuessCheckBox;
     QGenericMatrix<constants::NUM_DAYS, constants::NUM_HUMANS, HumanItem*> m_humanItemMatrix;
     meetings_t m_meetings;
-
+    std::function<void()> m_restartCallback;
 };
